@@ -17,4 +17,7 @@ urlpatterns = [
     # La app "blog" se monta en la raíz del sitio (incluye la página de inicio).
     path('', include('blog.urls')),
     path('destinos/', include('destinos.urls')),
+    path('cursos/', include('cursos.urls')),
+    path('restaurantes/', include('restaurantes.urls')),
+
 ]

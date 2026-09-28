@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     # Aplicaciones propias del proyecto
     'blog',
     'destinos',
+    'cursos',
+    'restaurantes',
 ]
 
 MIDDLEWARE = [
