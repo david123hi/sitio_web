@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "slug": "san-pedro-de-atacama",
+    "nombre": "San Pedro de Atacama",
+    "pais": "Chile",
+    "continente": "Sudamérica",
+    "precio_clp": 350000,
+    "duracion_dias": 4,
+    "descripcion": "El desierto más árido del mundo ofrece paisajes lunares, salares y algunos de los cielos más despejados del planeta para la observación de estrellas.",
+    "imagen": "destinos/img/atacama.svg"
+  },
+  {
+    "id": 2,
+    "slug": "torres-del-paine",
+    "nombre": "Torres del Paine",
+    "pais": "Chile",
+    "continente": "Sudamérica",
+    "precio_clp": 890000,
+    "duracion_dias": 6,
+    "descripcion": "Parque nacional patagónico famoso por sus imponentes torres de granito, glaciares y lagos de color turquesa.",
+    "imagen": "destinos/img/paine.svg"
+  },
+  {
+    "id": 3,
+    "slug": "kioto",
+    "nombre": "Kioto",
+    "pais": "Japón",
+    "continente": "Asia",
+    "precio_clp": 1450000,
+    "duracion_dias": 8,
+    "descripcion": "Antigua capital imperial japonesa, reconocida por sus templos budistas, jardines tradicionales y el histórico barrio de Gion.",
+    "imagen": "destinos/img/kioto.svg"
+  },
+  {
+    "id": 4,
+    "slug": "santorini",
+    "nombre": "Santorini",
+    "pais": "Grecia",
+    "continente": "Europa",
+    "precio_clp": 1600000,
+    "duracion_dias": 5,
+    "descripcion": "Isla volcánica del mar Egeo, famosa por sus casas blancas y azules construidas sobre acantilados con vista al mar.",
+    "imagen": "destinos/img/santorini.svg"
+  },
+  {
+    "id": 5,
+    "slug": "ciudad-del-cabo",
+    "nombre": "Ciudad del Cabo",
+    "pais": "Sudáfrica",
+    "continente": "África",
+    "precio_clp": 1100000,
+    "duracion_dias": 7,
+    "descripcion": "Ciudad costera al pie de la Montaña de la Mesa, con playas, viñedos cercanos y una rica mezcla cultural.",
+    "imagen": "destinos/img/capetown.svg"
+  }
+]

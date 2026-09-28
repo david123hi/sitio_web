@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}Sitio Informativo{% endblock %}</title>
+
+  <!-- Bootstrap local (archivos estáticos del proyecto) -->
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+  <!-- CSS propio del proyecto -->
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+
+  <!-- ===================== BARRA DE NAVEGACIÓN ===================== -->
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'blog:inicio' %}">Sitio<span>Informativo</span></a>
+      <ul class="navbar-nav">
+        <li><a class="nav-link" href="{% url 'blog:inicio' %}">Inicio</a></li>
+        <li><a class="nav-link" href="{% url 'blog:lista_articulos' %}">Blog</a></li>
+        <li><a class="nav-link" href="{% url 'destinos:listado' %}">Destinos</a></li>
+        <li><a class="nav-link" href="/admin/" target="_blank">Django Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===================== ENCABEZADO ===================== -->
+  {% block header %}
+  <header class="header-section">
+    <div class="container text-center">
+      <h1>{% block encabezado_titulo %}Bienvenido al sitio{% endblock %}</h1>
+      <p class="mb-0">{% block encabezado_subtitulo %}Proyecto Django - Programación Back End{% endblock %}</p>
+    </div>
+  </header>
+  {% endblock %}
+
+  <!-- ===================== CONTENIDO PRINCIPAL ===================== -->
+  <main class="container mb-5">
+    {% block contenido %}
+    {% endblock %}
+  </main>
+
+  <!-- ===================== PIE DE PÁGINA ===================== -->
+  <footer class="footer-section">
+    <div class="container">
+      <p class="mb-0">&copy; 2026 Sitio Informativo &mdash; Proyecto académico INACAP (TI3041)</p>
+      <p class="mb-0"><small>Desarrollado con Django, Bootstrap local y apoyo de IA generativa.</small></p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS local -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

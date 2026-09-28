@@ -1,0 +1,26 @@
+/* Estilos propios del proyecto, además de Bootstrap local */
+
+.card:hover {
+  transform: translateY(-3px);
+  transition: transform 0.15s ease-in-out;
+}
+
+.navbar-brand span {
+  color: #ffc107;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  margin: 0.15rem;
+  border-radius: 999px;
+  background-color: #e9ecef;
+  color: #212529;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.chip.activo {
+  background-color: #0d6efd;
+  color: #fff;
+}

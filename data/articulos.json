@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "titulo": "Introducción a Django Framework",
+    "categoria": "Backend",
+    "autor": "Equipo Editorial",
+    "fecha": "2026-08-01",
+    "resumen": "Conoce por qué Django es una de las herramientas favoritas para desarrollar aplicaciones web del lado del servidor de forma rápida y segura.",
+    "contenido": "Django es un framework de alto nivel escrito en Python que fomenta el desarrollo rápido y el diseño limpio y pragmático. Permite construir aplicaciones robustas reutilizando componentes, gestionando rutas mediante urls.py, procesando datos en las vistas y mostrando resultados a través del sistema de plantillas. Su arquitectura modular facilita separar un proyecto en varias aplicaciones independientes, cada una encargada de una funcionalidad específica del sitio.",
+    "imagen": "blog/img/django.svg"
+  },
+  {
+    "id": 2,
+    "titulo": "Bootstrap: estilos rápidos y responsivos",
+    "categoria": "Frontend",
+    "autor": "Equipo Editorial",
+    "fecha": "2026-08-05",
+    "resumen": "Bootstrap permite construir interfaces adaptables a cualquier dispositivo utilizando clases predefinidas.",
+    "contenido": "Bootstrap es un framework CSS que entrega un conjunto de componentes y clases utilitarias listas para usar: grillas responsivas, botones, tarjetas, barras de navegación y formularios. Al integrarlo de forma local dentro de la carpeta de archivos estáticos de Django, el sitio no depende de una conexión a internet para mostrar sus estilos, lo que mejora el rendimiento y la disponibilidad.",
+    "imagen": "blog/img/bootstrap.svg"
+  },
+  {
+    "id": 3,
+    "titulo": "Uso de archivos JSON como fuente de datos",
+    "categoria": "Backend",
+    "autor": "Equipo Editorial",
+    "fecha": "2026-08-10",
+    "resumen": "Cuando no se requiere una base de datos, JSON es una alternativa simple y legible para almacenar información estructurada.",
+    "contenido": "JSON (JavaScript Object Notation) es un formato de texto ligero para el intercambio de datos. En un proyecto Django es posible leer estos archivos desde las vistas utilizando el módulo json de Python, transformarlos en listas o diccionarios y enviarlos al contexto de una plantilla para que sean renderizados dinámicamente en el HTML.",
+    "imagen": "blog/img/json.svg"
+  },
+  {
+    "id": 4,
+    "titulo": "Inteligencia Artificial como apoyo al desarrollo",
+    "categoria": "IA",
+    "autor": "Equipo Editorial",
+    "fecha": "2026-08-14",
+    "resumen": "Herramientas como Claude o ChatGPT pueden acelerar la escritura de componentes HTML, la corrección de errores y el diseño de interfaces.",
+    "contenido": "Las herramientas de Inteligencia Artificial Generativa se pueden utilizar como asistentes durante el desarrollo de software: ayudan a generar componentes de interfaz, sugieren mejoras de accesibilidad, apoyan la carga y transformación de datos JSON y agilizan la depuración de errores. Es importante documentar los prompts utilizados y cómo se incorporaron las respuestas obtenidas al proyecto final.",
+    "imagen": "blog/img/ia.svg"
+  },
+  {
+    "id": 5,
+    "titulo": "Herencia de plantillas en Django",
+    "categoria": "Frontend",
+    "autor": "Equipo Editorial",
+    "fecha": "2026-08-18",
+    "resumen": "La herencia de plantillas evita duplicar código HTML repetido en cada página del sitio.",
+    "contenido": "Mediante las etiquetas {% extends %} y {% block %}, Django permite crear una plantilla base con la estructura común del sitio (navegación, encabezado y pie de página) que luego es heredada por el resto de las páginas, las cuales solo deben sobrescribir el contenido específico de cada bloque.",
+    "imagen": "blog/img/plantillas.svg"
+  }
+]

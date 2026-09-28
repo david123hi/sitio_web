@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}{{ titulo_pagina }}{% endblock %}
+{% block encabezado_titulo %}{{ destino.nombre }}{% endblock %}
+{% block encabezado_subtitulo %}{{ destino.pais }} · {{ destino.continente }}{% endblock %}
+
+{% block contenido %}
+  <img src="{% static destino.imagen %}" alt="{{ destino.nombre }}" class="rounded mb-3" style="max-width: 100%;">
+  <span class="badge badge-success mb-3">{{ destino.categoria_precio }}</span>
+  <p>{{ destino.descripcion }}</p>
+  <ul class="list-unstyled">
+    <li><strong>Duración sugerida:</strong> {{ destino.duracion_dias }} días</li>
+    <li><strong>Precio referencial:</strong> ${{ destino.precio_clp }} CLP</li>
+  </ul>
+  <a href="{% url 'destinos:listado' %}" class="btn btn-primary">&larr; Volver a destinos</a>
+{% endblock %}

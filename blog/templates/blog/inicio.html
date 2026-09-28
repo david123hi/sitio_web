@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}{{ titulo_pagina }}{% endblock %}
+
+{% block encabezado_titulo %}Blog de Tecnología{% endblock %}
+{% block encabezado_subtitulo %}Artículos sobre desarrollo web, Django, Bootstrap e IA{% endblock %}
+
+{% block contenido %}
+
+  <p class="text-muted">
+    Este sitio cuenta actualmente con <strong>{{ total_articulos }}</strong> artículos
+    publicados, distribuidos en las siguientes categorías:
+  </p>
+
+  <div class="mb-4">
+    {% for categoria in categorias %}
+      <span class="chip">{{ categoria }}</span>
+    {% empty %}
+      <span class="text-muted">Aún no hay categorías registradas.</span>
+    {% endfor %}
+  </div>
+
+  <h2>Últimos artículos</h2>
+  <div class="row">
+    {% for articulo in ultimos_articulos %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{% static articulo.imagen %}" alt="{{ articulo.titulo }}">
+          <div class="card-body">
+            <span class="badge badge-primary mb-2">{{ articulo.categoria }}</span>
+            <h5 class="card-title">{{ articulo.titulo }}</h5>
+            <p class="card-text">{{ articulo.resumen }}</p>
+            <a href="{% url 'blog:detalle_articulo' articulo.id %}" class="btn btn-primary btn-sm">Leer más</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-center mt-3">
+    <a href="{% url 'blog:lista_articulos' %}" class="btn btn-primary">Ver todos los artículos</a>
+    <a href="{% url 'destinos:listado' %}" class="btn btn-outline-light" style="color:#0d6efd;border-color:#0d6efd;">Ver destinos de viaje</a>
+  </div>
+
+{% endblock %}
