@@ -1,12 +1,16 @@
 {% extends 'travelers_Base.html' %}
-{% block titulo %} {{viaje.actividad}} {% endblock %}
+{% block titulo %}Viajeros{% endblock %}
 {% block contenido %}
-<header class="tn-detail-header">
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Viajes disponibles</h2>
-    <a href="#" class = "btn btn-success">+ Añadir viajero</a>
+    <h2>Viajeros</h2>
+    <a href="#" class="btn btn-success">+ Agregar viajero</a>
 </div>
-</header>
+
+<form class="d-flex gap-2 mb-4" role="search" action="#" method="get">
+    <input type="text" name="q" class="form-control" placeholder="Buscar viajero por nombre o correo...">
+    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+</form>
+
 <table class="table table-hover bg-white shadow-sm">
     <thead class="table-dark">
         <tr>
@@ -18,14 +22,18 @@
     <tbody>
         {% for viajero in viajeros %}
         <tr>
-            <td>{{viajero.nombre}}</td>
-            <td>{{viajero.correo}}</td>
+            <td>{{ viajero.nombre }}</td>
+            <td>{{ viajero.correo }}</td>
             <td class="d-flex gap-2">
                 <a href="#" class="btn btn-sm btn-outline-primary">Modificar</a>
                 <a href="#" class="btn btn-sm btn-outline-danger">Eliminar</a>
             </td>
-            {%endfor%}
         </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3" class="text-muted">Aún no hay viajeros cargados en la base de datos.</td>
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
 {% endblock %}

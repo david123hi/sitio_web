@@ -3,9 +3,14 @@
 {% block contenido %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Alertas activas hoy</h2>
-    <a href="#" class = "btn btn-success">+ Añadir alerta de viaje</a>
+    <h2>Alertas de viaje</h2>
+    <a href="#" class="btn btn-success">+ Agregar alerta de viaje</a>
 </div>
+
+<form class="d-flex gap-2 mb-4" role="search" action="#" method="get">
+    <input type="text" name="q" class="form-control" placeholder="Buscar alerta por título o descripción...">
+    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+</form>
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
     {% for alerta in alertas %}
@@ -16,27 +21,19 @@
                 <h6 class="card-subtitle mb-2 text-muted">
                     {{ alerta.pais }} · inicia el {{ alerta.emision }} - termina el {{ alerta.expiracion }}
                 </h6>
+                <p class="card-text">{{ alerta.descripcion }}</p>
+                <div class="badge {% if alerta.nivel == 'B' %} bg-success {% elif alerta.nivel == 'M' %} bg-secondary {% elif alerta.nivel == 'A' %} bg-danger {% elif alerta.nivel == 'E' %} bg-black {% endif %} mb-2">
+                    {% if alerta.nivel == 'B' %} Bajo {% elif alerta.nivel == 'M' %} Medio {% elif alerta.nivel == 'A' %} Alto {% elif alerta.nivel == 'E' %} Extremo {% endif %}</div>
                 {% for requisito in alerta.requisitos_vacunas.all %}
-                <p class="card-text">Vacuna: {{ requisito.vacuna }} - Tipo: {{ requisito.get_tipo_display }}</p>
-                <p class = "card-text">{{alerta.descripcion}}</p>
-                                
-                <div class ="badge {%if alerta.nivel == 'B' %} bg-success {% elif alerta.nivel == 'M'%} bg-secondary {% elif alerta.nivel == 'A'%} bg-danger {%elif alerta.nivel == 'E' %} bg-black {% endif %} mb-2">
-                    {% if alerta.nivel == 'B' %} Bajo {% elif alerta.nivel == 'M'%} Medio {% elif alerta.nivel == 'A'%} Alto {% elif alerta.nivel == 'E' %} Extremo {% endif %}</div>
-                </div>
+                <p class="card-text mb-1">Vacuna: {{ requisito.vacuna }} - Tipo: {{ requisito.get_tipo_display }}</p>
                 {% empty %}
-                    <p class="card-text text-muted">No hay requisitos de vacunación registrados.</p>
+                <p class="card-text text-muted">No hay requisitos de vacunación registrados.</p>
                 {% endfor %}
-                <div class ="badge {%if viaje.estado == 'A' %} bg-success {% elif viaje.estado == 'C'%} bg-secondary {% elif viaje.estado == 'F'%} bg-danger {% endif %} mb-2">
-                    {% if viaje.estado == 'A' %} Abierto {% elif viaje.estado == 'C'%} Cerrado {% elif viaje.estado == 'F'%} Finalizado {% endif %}</div>
-                <div class="card-footer bg-white d-flex gap-2">
+            </div>
+            <div class="card-footer bg-white d-flex gap-2">
                 <a href="#" class="btn btn-sm btn-outline-primary">Modificar</a>
                 <a href="#" class="btn btn-sm btn-outline-danger">Eliminar</a>
-                
             </div>
-                </div>
-                <div>
-                
-            
         </div>
     </div>
     {% empty %}
