@@ -8,7 +8,7 @@
     "precio_clp": 350000,
     "duracion_dias": 4,
     "descripcion": "El desierto más árido del mundo ofrece paisajes lunares, salares y algunos de los cielos más despejados del planeta para la observación de estrellas.",
-    "imagen": "destinos/img/atacama.svg"
+    "imagen": "destinos/img/atacama.jpg"
   },
   {
     "id": 2,
@@ -19,7 +19,7 @@
     "precio_clp": 890000,
     "duracion_dias": 6,
     "descripcion": "Parque nacional patagónico famoso por sus imponentes torres de granito, glaciares y lagos de color turquesa.",
-    "imagen": "destinos/img/paine.svg"
+    "imagen": "destinos/img/paine.jpg"
   },
   {
     "id": 3,
@@ -30,7 +30,7 @@
     "precio_clp": 1450000,
     "duracion_dias": 8,
     "descripcion": "Antigua capital imperial japonesa, reconocida por sus templos budistas, jardines tradicionales y el histórico barrio de Gion.",
-    "imagen": "destinos/img/kioto.svg"
+    "imagen": "destinos/img/kioto.jpg"
   },
   {
     "id": 4,
@@ -41,7 +41,7 @@
     "precio_clp": 1600000,
     "duracion_dias": 5,
     "descripcion": "Isla volcánica del mar Egeo, famosa por sus casas blancas y azules construidas sobre acantilados con vista al mar.",
-    "imagen": "destinos/img/santorini.svg"
+    "imagen": "destinos/img/santorini.jpg"
   },
   {
     "id": 5,
@@ -52,6 +52,6 @@
     "precio_clp": 1100000,
     "duracion_dias": 7,
     "descripcion": "Ciudad costera al pie de la Montaña de la Mesa, con playas, viñedos cercanos y una rica mezcla cultural.",
-    "imagen": "destinos/img/capetown.svg"
+    "imagen": "destinos/img/capetown.jpg"
   }
 ]
