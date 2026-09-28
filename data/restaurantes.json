@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "el-fogon-del-valle",
+    "nombre": "El Fogón del Valle",
+    "tipo_cocina": "Chilena",
+    "ciudad": "La Serena",
+    "direccion": "Av. del Mar 1200",
+    "rango_precio": "$$",
+    "calificacion": "4.5",
+    "descripcion": "Cocina chilena tradicional con pastel de choclo, cazuelas y carnes a la parrilla en un ambiente familiar.",
+    "imagen": "restaurantes/img/fogon.svg"
+  },
+  {
+    "slug": "casa-del-pescador",
+    "nombre": "Casa del Pescador",
+    "tipo_cocina": "Mariscos",
+    "ciudad": "Coquimbo",
+    "direccion": "Muelle Pesquero 45",
+    "rango_precio": "$$",
+    "calificacion": "4.7",
+    "descripcion": "Pescados y mariscos frescos del día, con vista a la bahía. Especialidad en ceviche y machas a la parmesana.",
+    "imagen": "restaurantes/img/pescador.svg"
+  },
+  {
+    "slug": "trattoria-bella-vita",
+    "nombre": "Trattoria Bella Vita",
+    "tipo_cocina": "Italiana",
+    "ciudad": "Santiago",
+    "direccion": "Calle Lastarria 320",
+    "rango_precio": "$$$",
+    "calificacion": "4.6",
+    "descripcion": "Pastas artesanales, pizzas al horno de piedra y una carta de vinos seleccionada en un local acogedor.",
+    "imagen": "restaurantes/img/bellavita.svg"
+  },
+  {
+    "slug": "sakura-sushi-house",
+    "nombre": "Sakura Sushi House",
+    "tipo_cocina": "Japonesa",
+    "ciudad": "Viña del Mar",
+    "direccion": "Av. San Martín 780",
+    "rango_precio": "$$$",
+    "calificacion": "4.4",
+    "descripcion": "Sushi, sashimi y platos calientes japoneses preparados al momento con ingredientes de primera calidad.",
+    "imagen": "restaurantes/img/sakura.svg"
+  },
+  {
+    "slug": "sabores-de-la-abuela",
+    "nombre": "Sabores de la Abuela",
+    "tipo_cocina": "Chilena",
+    "ciudad": "Ovalle",
+    "direccion": "Calle Victoria 210",
+    "rango_precio": "$",
+    "calificacion": "4.2",
+    "descripcion": "Almuerzos caseros a precio accesible: empanadas, porotos granados y postres tradicionales.",
+    "imagen": "restaurantes/img/abuela.svg"
+  },
+  {
+    "slug": "napoli-express",
+    "nombre": "Nápoli Express",
+    "tipo_cocina": "Italiana",
+    "ciudad": "La Serena",
+    "direccion": "Cordovez 615",
+    "rango_precio": "$",
+    "calificacion": "4.0",
+    "descripcion": "Pizzas y pastas rápidas para llevar o comer en el local, ideales para una comida informal.",
+    "imagen": "restaurantes/img/napoli.svg"
+  }
+]

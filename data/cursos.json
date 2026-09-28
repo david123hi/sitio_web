@@ -1,0 +1,62 @@
+[
+  {
+    "titulo": "Python desde Cero",
+    "area": "Programación",
+    "instructor": "Camila Rojas",
+    "nivel": "basico",
+    "duracion_horas": 30,
+    "precio_clp": 0,
+    "descripcion": "Aprende las bases de Python: variables, estructuras de control, funciones y manejo de archivos con ejercicios prácticos.",
+    "imagen": "cursos/img/python.svg"
+  },
+  {
+    "titulo": "Django para Aplicaciones Web",
+    "area": "Programación",
+    "instructor": "Matías Fuentes",
+    "nivel": "intermedio",
+    "duracion_horas": 45,
+    "precio_clp": 59990,
+    "descripcion": "Construye aplicaciones web completas con Django: modelos, vistas, plantillas, formularios y panel de administración.",
+    "imagen": "cursos/img/django.svg"
+  },
+  {
+    "titulo": "SQL y Modelado de Datos",
+    "area": "Bases de Datos",
+    "instructor": "Valentina Soto",
+    "nivel": "basico",
+    "duracion_horas": 25,
+    "precio_clp": 29990,
+    "descripcion": "Diseño de modelos entidad-relación, consultas SQL, llaves foráneas y normalización de tablas en MySQL.",
+    "imagen": "cursos/img/sql.svg"
+  },
+  {
+    "titulo": "MySQL Avanzado y Optimización",
+    "area": "Bases de Datos",
+    "instructor": "Diego Herrera",
+    "nivel": "avanzado",
+    "duracion_horas": 40,
+    "precio_clp": 79990,
+    "descripcion": "Índices, procedimientos almacenados, transacciones y técnicas para optimizar consultas en bases de datos relacionales.",
+    "imagen": "cursos/img/mysql.svg"
+  },
+  {
+    "titulo": "Diseño Web con Bootstrap 5",
+    "area": "Diseño Web",
+    "instructor": "Francisca Leiva",
+    "nivel": "basico",
+    "duracion_horas": 20,
+    "precio_clp": 0,
+    "descripcion": "Crea sitios responsivos usando el sistema de grillas, componentes y utilidades de Bootstrap 5.",
+    "imagen": "cursos/img/bootstrap.svg"
+  },
+  {
+    "titulo": "Despliegue en AWS con Linux",
+    "area": "Infraestructura Cloud",
+    "instructor": "Andrés Molina",
+    "nivel": "intermedio",
+    "duracion_horas": 35,
+    "precio_clp": 69990,
+    "descripcion": "Lanza instancias EC2, configura servidores Linux, Nginx y Gunicorn, y publica aplicaciones en la nube.",
+    "imagen": "cursos/img/aws.svg"
+  }
+]

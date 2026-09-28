@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}{{ titulo_pagina }}{% endblock %}
+{% block encabezado_titulo %}Cursos Online{% endblock %}
+{% block encabezado_subtitulo %}Catálogo de cursos de tecnología almacenado en la base de datos{% endblock %}
+
+{% block contenido %}
+
+  <p class="text-muted">Explora {{ total_cursos }} cursos disponibles.</p>
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 gap-2">
+    <form class="d-flex" role="search" method="get" action="{% url 'cursos:listado' %}">
+      {% if area_actual != 'todas' %}<input type="hidden" name="area" value="{{ area_actual }}">{% endif %}
+      <input class="form-control me-2" type="search" name="q" value="{{ busqueda }}" placeholder="Buscar curso por título...">
+      <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+    </form>
+    <a href="#" class="btn btn-success">+ Agregar curso</a>
+  </div>
+
+  <div class="mb-4">
+    <strong>Filtrar por área:</strong><br>
+    <a href="{% url 'cursos:listado' %}"
+       class="chip {% if area_actual == 'todas' %}activo{% endif %}">Todas</a>
+    {% for area in areas %}
+      <a href="?area={{ area.nombre }}"
+         class="chip {% if area_actual == area.nombre %}activo{% endif %}">{{ area.nombre }}</a>
+    {% endfor %}
+  </div>
+
+  {% if cursos %}
+    <div class="row">
+      {% for curso in cursos %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <img src="{% static curso.imagen %}" alt="{{ curso.titulo }}">
+            <div class="card-body">
+              <span class="badge bg-primary mb-2">{{ curso.area.nombre }}</span>
+              <span class="badge bg-secondary mb-2">{{ curso.get_nivel_display }}</span>
+              <h5 class="card-title">{{ curso.titulo }}</h5>
+              <p class="card-text">{{ curso.descripcion|truncatechars:110 }}</p>
+              <p class="text-muted"><small>
+                {{ curso.duracion_horas }} horas ·
+                {% if curso.es_gratuito %}Gratis{% else %}${{ curso.precio_clp }} CLP{% endif %}
+              </small></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'cursos:detalle' curso.id %}" class="btn btn-primary btn-sm">Ver detalle</a>
+                <div class="btn-group btn-group-sm">
+                  <a href="#" class="btn btn-outline-primary">Modificar</a>
+                  <a href="#" class="btn btn-outline-danger">Eliminar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">No hay cursos para el área o búsqueda seleccionada.</div>
+  {% endif %}
+
+{% endblock %}
