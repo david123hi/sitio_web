@@ -1,11 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360" viewBox="0 0 600 360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0077B6"/>
-      <stop offset="100%" stop-color="#1a1a2e"/>
+    <linearGradient id="sky1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4facfe" />
+      <stop offset="100%" stop-color="#00f2fe" />
+    </linearGradient>
+    <linearGradient id="wood1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d4a373" />
+      <stop offset="100%" stop-color="#faedcd" />
+    </linearGradient>
+    <linearGradient id="window1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0f7fa" />
+      <stop offset="100%" stop-color="#80deea" />
     </linearGradient>
   </defs>
-  <rect width="600" height="360" fill="url(#g)"/>
-  <text x="50%" y="50%" font-family="Segoe UI, Arial, sans-serif" font-size="34"
-        fill="#ffffff" text-anchor="middle" dominant-baseline="middle" font-weight="bold">Casa del Pescador</text>
+  <rect width="400" height="300" fill="url(#sky1)" />
+  <!-- Base del edificio -->
+  <rect x="40" y="120" width="320" height="180" fill="#fcfcfc" rx="5" />
+  <!-- Techo / Toldo -->
+  <path d="M 30 120 L 370 120 L 360 80 L 40 80 Z" fill="#005f73" />
+  <rect x="30" y="120" width="340" height="15" fill="#0a9396" rx="5" />
+  <!-- Letrero -->
+  <rect x="100" y="90" width="200" height="40" fill="#e9d8a6" rx="3" stroke="#005f73" stroke-width="2"/>
+  <text x="200" y="116" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#005f73" text-anchor="middle">Casa del Pescador</text>
+  <!-- Puerta -->
+  <rect x="160" y="180" width="80" height="120" fill="url(#wood1)" rx="2"/>
+  <rect x="165" y="185" width="30" height="50" fill="url(#window1)" />
+  <rect x="205" y="185" width="30" height="50" fill="url(#window1)" />
+  <circle cx="170" cy="245" r="4" fill="#555" />
+  <!-- Ventanas Laterales Circulares (estilo barco) -->
+  <circle cx="100" cy="200" r="35" fill="#005f73" />
+  <circle cx="100" cy="200" r="28" fill="url(#window1)" />
+  <circle cx="300" cy="200" r="35" fill="#005f73" />
+  <circle cx="300" cy="200" r="28" fill="url(#window1)" />
+  <!-- Detalles red -->
+  <path d="M 60 260 L 140 260 L 140 300 L 60 300 Z" fill="none" stroke="#d4a373" stroke-width="2" stroke-dasharray="4,4" />
 </svg>

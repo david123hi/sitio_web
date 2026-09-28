@@ -1,11 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360" viewBox="0 0 600 360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#2D6A4F"/>
-      <stop offset="100%" stop-color="#1a1a2e"/>
+    <linearGradient id="wall2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faedcd" />
+      <stop offset="100%" stop-color="#d4a373" />
     </linearGradient>
   </defs>
-  <rect width="600" height="360" fill="url(#g)"/>
-  <text x="50%" y="50%" font-family="Segoe UI, Arial, sans-serif" font-size="34"
-        fill="#ffffff" text-anchor="middle" dominant-baseline="middle" font-weight="bold">Trattoria Bella Vita</text>
+  <rect width="400" height="300" fill="#e9edc9" />
+  <!-- Edificio clásico -->
+  <rect x="30" y="60" width="340" height="240" fill="url(#wall2)" rx="5" />
+  <!-- Cornisa decorativa -->
+  <rect x="20" y="50" width="360" height="15" fill="#ccd5ae" />
+  <rect x="25" y="65" width="350" height="10" fill="#e9edc9" />
+  <!-- Enredaderas Ivy -->
+  <path d="M 30 60 Q 80 150 50 200 Q 60 250 30 300" fill="none" stroke="#588157" stroke-width="12" stroke-dasharray="10,5" />
+  <path d="M 370 60 Q 320 120 350 180 Q 340 240 370 300" fill="none" stroke="#3a5a40" stroke-width="15" stroke-dasharray="12,6" />
+  <!-- Toldo redondeado clásico -->
+  <path d="M 80 140 Q 200 110 320 140 L 310 160 Q 200 140 90 160 Z" fill="#344e41" />
+  <path d="M 90 160 Q 110 170 130 160 Q 150 170 170 160 Q 190 170 210 160 Q 230 170 250 160 Q 270 170 290 160 Q 310 170 310 160" fill="none" stroke="#dad7cd" stroke-width="4" />
+  <!-- Letrero elegante -->
+  <rect x="120" y="90" width="160" height="30" fill="#344e41" rx="15" />
+  <text x="200" y="111" font-family="'Times New Roman', Times, serif" font-size="14" font-weight="bold" fill="#dad7cd" text-anchor="middle" font-style="italic">Trattoria Bella Vita</text>
+  <!-- Puerta y ventana con arco -->
+  <path d="M 170 200 A 30 30 0 0 1 230 200 L 230 300 L 170 300 Z" fill="#a3b18a" />
+  <path d="M 175 205 A 25 25 0 0 1 225 205 L 225 300 L 175 300 Z" fill="#344e41" />
+  
+  <path d="M 90 220 A 20 20 0 0 1 130 220 L 130 270 L 90 270 Z" fill="#fefae0" stroke="#344e41" stroke-width="3" />
+  <path d="M 270 220 A 20 20 0 0 1 310 220 L 310 270 L 270 270 Z" fill="#fefae0" stroke="#344e41" stroke-width="3" />
 </svg>

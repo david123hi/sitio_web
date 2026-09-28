@@ -1,11 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360" viewBox="0 0 600 360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#D62828"/>
-      <stop offset="100%" stop-color="#1a1a2e"/>
+    <linearGradient id="sky3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e2e2" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a86ff" opacity="0.3" />
+      <stop offset="100%" stop-color="#e0fbfc" opacity="0.6" />
     </linearGradient>
   </defs>
-  <rect width="600" height="360" fill="url(#g)"/>
-  <text x="50%" y="50%" font-family="Segoe UI, Arial, sans-serif" font-size="34"
-        fill="#ffffff" text-anchor="middle" dominant-baseline="middle" font-weight="bold">Nápoli Express</text>
+  <rect width="400" height="300" fill="url(#sky3)" />
+  <!-- Edificio moderno -->
+  <rect x="60" y="100" width="280" height="200" fill="#2b2d42" />
+  <!-- Toldo de franjas -->
+  <path d="M 50 100 L 350 100 L 370 140 L 30 140 Z" fill="#d90429" />
+  <path d="M 90 100 L 130 100 L 140 140 L 80 140 Z" fill="#edf2f4" />
+  <path d="M 170 100 L 210 100 L 220 140 L 160 140 Z" fill="#edf2f4" />
+  <path d="M 250 100 L 290 100 L 300 140 L 240 140 Z" fill="#edf2f4" />
+  <!-- Letrero -->
+  <rect x="100" y="60" width="200" height="50" fill="#8d99ae" rx="5" />
+  <text x="200" y="92" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">NÁPOLI EXPRESS</text>
+  <!-- Ventanales grandes -->
+  <rect x="80" y="160" width="100" height="140" fill="url(#glass)" stroke="#8d99ae" stroke-width="4" />
+  <!-- Puerta vidrio -->
+  <rect x="220" y="160" width="100" height="140" fill="url(#glass)" stroke="#8d99ae" stroke-width="4" />
+  <rect x="225" y="165" width="90" height="130" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.5" />
+  <!-- Detalle pizza neon -->
+  <circle cx="130" cy="210" r="25" fill="none" stroke="#ffd166" stroke-width="3" />
+  <path d="M 130 185 L 115 225 L 145 225 Z" fill="none" stroke="#ef233c" stroke-width="2" />
 </svg>

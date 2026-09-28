@@ -1,11 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360" viewBox="0 0 600 360">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#C9184A"/>
-      <stop offset="100%" stop-color="#1a1a2e"/>
+    <linearGradient id="night" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#14213d" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+    <linearGradient id="shoji" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfcdc" />
+      <stop offset="100%" stop-color="#fed9b7" />
     </linearGradient>
   </defs>
-  <rect width="600" height="360" fill="url(#g)"/>
-  <text x="50%" y="50%" font-family="Segoe UI, Arial, sans-serif" font-size="34"
-        fill="#ffffff" text-anchor="middle" dominant-baseline="middle" font-weight="bold">Sakura Sushi House</text>
+  <rect width="400" height="300" fill="url(#night)" />
+  <!-- Fachada madera oscura -->
+  <rect x="50" y="100" width="300" height="200" fill="#2c1a16" />
+  <!-- Techo asiático curvado -->
+  <path d="M 30 100 Q 200 50 370 100 L 350 120 Q 200 80 50 120 Z" fill="#d90429" />
+  <!-- Cortinas Noren -->
+  <rect x="150" y="120" width="30" height="50" fill="#ef233c" />
+  <rect x="185" y="120" width="30" height="50" fill="#ef233c" />
+  <rect x="220" y="120" width="30" height="50" fill="#ef233c" />
+  <circle cx="165" cy="145" r="8" fill="#fff" />
+  <circle cx="200" cy="145" r="8" fill="#fff" />
+  <circle cx="235" cy="145" r="8" fill="#fff" />
+  <!-- Puertas corredizas Shoji -->
+  <rect x="120" y="170" width="160" height="130" fill="url(#shoji)" />
+  <line x1="160" y1="170" x2="160" y2="300" stroke="#2c1a16" stroke-width="3" />
+  <line x1="200" y1="170" x2="200" y2="300" stroke="#2c1a16" stroke-width="4" />
+  <line x1="240" y1="170" x2="240" y2="300" stroke="#2c1a16" stroke-width="3" />
+  <line x1="120" y1="210" x2="280" y2="210" stroke="#2c1a16" stroke-width="3" />
+  <line x1="120" y1="250" x2="280" y2="250" stroke="#2c1a16" stroke-width="3" />
+  <!-- Letrero iluminado -->
+  <rect x="60" y="130" width="50" height="140" fill="#fff" rx="5" />
+  <text x="85" y="160" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ef233c" text-anchor="middle">S</text>
+  <text x="85" y="185" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ef233c" text-anchor="middle">A</text>
+  <text x="85" y="210" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ef233c" text-anchor="middle">K</text>
+  <text x="85" y="235" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ef233c" text-anchor="middle">U</text>
+  <text x="85" y="260" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ef233c" text-anchor="middle">R</text>
+  <text x="85" y="285" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ef233c" text-anchor="middle">A</text>
+  <!-- Detalles flor de cerezo -->
+  <circle cx="320" cy="150" r="15" fill="#ffb7b2" opacity="0.8"/>
+  <circle cx="340" cy="140" r="20" fill="#ffb7b2" opacity="0.6"/>
+  <circle cx="330" cy="170" r="18" fill="#ffb7b2" opacity="0.9"/>
 </svg>
