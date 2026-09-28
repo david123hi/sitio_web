@@ -25,7 +25,7 @@ class Destino(models.Model):
     """Destino de viaje recomendado."""
     slug = models.SlugField(max_length=150, unique=True)
     nombre = models.CharField(max_length=150)
-    pais = models.CharField(max_length=100, unique=True)
+    pais = models.CharField(max_length=100)
     continente = models.ForeignKey(
         Continente, on_delete=models.PROTECT, related_name='destinos'
     )

@@ -3,7 +3,7 @@ from destinos.models import Destino
 
 class Alerta (models.Model):
     titulo = models.CharField(max_length=100)
-    pais = models.ForeignKey(Destino, to_field="pais", on_delete=models.CASCADE)
+    pais = models.ForeignKey(Destino, on_delete=models.CASCADE, related_name='alertas')
     nivel = models.CharField(max_length=1, choices=[('B', 'Bajo'), ('M', 'Medio'), ('A', 'Alto'), ('E', 'Extremo')], default='B', verbose_name='Nivel de alerta')
     emision = models.DateField()
     descripcion = models.CharField(max_length=100, default="Sin descripción")
