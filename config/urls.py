@@ -19,5 +19,7 @@ urlpatterns = [
     path('destinos/', include('destinos.urls')),
     path('cursos/', include('cursos.urls')),
     path('restaurantes/', include('restaurantes.urls')),
+    path('viajes/', include('travelers.urls')),
+    path('travel_advisories/', include('travel_advisories.urls')),
 
 ]

@@ -1,0 +1,38 @@
+{% extends 'travelers_Base.html' %}
+{% block titulo %} {{viaje.actividad}}{% endblock %}
+{% block contenido %}
+<header class="tn-detail-header">
+    <div class="container">
+        <p class="mb-1"><a href="{% url 'travelers:lista_viajes' %}" class="text-black-50 text-decoration-none">&larr; Volver a viajes</a></p>
+        <h1>{{ viaje.actividad }}</h1>
+    </div>
+</header>
+<div class="d-flex justify-content-between align-items-center mb-3">
+<h2 class="mt-4">Lista de participantes</h2>
+<a href="#" class="btn btn-success">+ Añadir participante</a>
+</div>
+
+<table class="table table-hover bg-white shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for participacion in participaciones %}
+        <tr>
+            <td>{{participacion.viajero}}</td>
+            <td>{% if participacion.rol == 'O' %} Organizador {% elif participacion.rol == 'V' %} Viajero {%elif participacion.rol == 'I' %} Viajero {%endif%} </td>
+            <td>{% if participacion.estado == 'C' %} Confirmado {% elif participacion.estado == 'P' %} Pendiente {%elif participacion.estado == 'N' %} No viaja {%endif%}</td>
+            <td class="d-flex gap-2">
+                <a href="#" class="btn btn-sm btn-outline-primary">Modificar</a>
+                <a href="#" class="btn btn-sm btn-outline-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

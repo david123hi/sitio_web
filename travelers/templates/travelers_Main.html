@@ -1,0 +1,39 @@
+{% extends 'travelers_Base.html' %}
+{% block titulo %}Viajes{% endblock %}
+{% block contenido %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Viajes disponibles</h2>
+    <a href="#" class = "btn btn-success">+ Añadir viaje</a>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for viaje in viajes %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ viaje.actividad }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    {{ viaje.destino }} · inicia el {{ viaje.inicio }} - termina el {{ viaje.fin }}
+                </h6>
+                <p class="card-text my-n2 mb-n2 p-n2">{{ viaje.cupos_disponibles }} cupos disponibles</p>
+                <div class ="badge {%if viaje.estado == 'A' %} bg-success {% elif viaje.estado == 'C'%} bg-secondary {% elif viaje.estado == 'F'%} bg-danger {% endif %} mb-2">
+                    {% if viaje.estado == 'A' %} Abierto {% elif viaje.estado == 'C'%} Cerrado {% elif viaje.estado == 'F'%} Finalizado {% endif %}</div>
+                </div>
+                
+                <div>
+                    
+                
+            <div class="card-footer bg-white d-flex gap-2">
+                <a href="#" class="btn btn-sm btn-outline-primary">Modificar</a>
+                <a href="#" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                <a href="{% url 'travelers:detalle_viaje' viaje.id %}" class="btn btn-sm btn-primary ms-auto">Ver detalles</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">Aún no hay viajes cargados en la base de datos.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
