@@ -77,7 +77,7 @@ los datos desde `data/*.json` hacia la base de datos.
 ### Base de datos y modelo de datos
 
 - **Local (desarrollo):** SQLite, para poder ejecutar el proyecto sin instalar nada.
-- **EC2 (producción):** MySQL/MariaDB, administrado y verificado desde phpMyAdmin.
+- **EC2 (producción):** MariaDB (compatible con MySQL), administrado y verificado desde phpMyAdmin.
 
 El motor se elige solo con variables de entorno; el código no cambia.
 
@@ -232,9 +232,35 @@ instancia se detenga y se vuelva a iniciar.
 
 > Las credenciales de acceso se entregan en el Documento Técnico.
 
+### Arquitectura del despliegue
+
+```
+Navegador ──► Nginx (puerto 80) ──► Gunicorn (socket unix) ──► Django ──► MariaDB
+Navegador ──► Nginx (puerto 8080) ──► PHP-FPM ──► phpMyAdmin ──► MariaDB
+```
+
+| Componente | Servicio systemd     | Función                                              |
+| ---------- | -------------------- | ---------------------------------------------------- |
+| Django     | `gunicorn.service`   | Ejecuta la aplicación (`config.wsgi:application`)    |
+| Nginx      | `nginx.service`      | Recibe las visitas y las reenvía a Gunicorn / phpMyAdmin |
+| MariaDB    | `mariadb.service`    | Base de datos `sitio_web`                            |
+| PHP-FPM    | `php-fpm.service`    | Ejecuta phpMyAdmin                                   |
+
+El proyecto está en `/var/www/negocio` (clonado desde GitHub), con su entorno virtual
+`venv/`, su archivo `.env` y la carpeta `staticfiles/` generada con `collectstatic`.
+Gunicorn se ejecuta como servicio con:
+
+```
+/var/www/negocio/venv/bin/gunicorn --access-logfile - --workers 3 \
+  --bind unix:/var/www/negocio/gunicorn.sock config.wsgi:application
+```
+
+Todos los servicios arrancan solos al iniciar la instancia, por lo que no hace falta
+levantar nada a mano después de un reinicio.
+
 ### 1. Instancia y acceso
 
-En el *Security Group* de la instancia abrir el puerto **22** (SSH, idealmente solo desde la IP propia), **80** (sitio Django), **8080** (phpMyAdmin, idealmente restringido a la IP propia) y **8000** si se usa `runserver` en ese puerto. No se abre el puerto 3306: la base de datos solo acepta conexiones locales.
+En el *Security Group* de la instancia abrir el puerto **22** (SSH, idealmente solo desde la IP propia), **80** (sitio Django) y **8080** (phpMyAdmin, idealmente restringido a la IP propia). No se abre el puerto 3306: la base de datos solo acepta conexiones locales.
 
 ```
 ssh -i "clave.pem" ec2-user@34.237.28.226
@@ -244,12 +270,12 @@ ssh -i "clave.pem" ec2-user@34.237.28.226
 
 ```
 sudo dnf update -y
-sudo dnf install -y python3 python3-pip git gcc python3-devel pkgconf-pkg-config mariadb105-devel tmux
+sudo dnf install -y python3 python3-pip git gcc python3-devel pkgconf-pkg-config mariadb105-devel
 ```
 
 ### 3. Base de datos
 
-Se utiliza MySQL/MariaDB, con una base `sitio_web` y un usuario dedicado para Django:
+Se utiliza MariaDB, con una base `sitio_web` y un usuario dedicado para Django:
 
 ```
 CREATE DATABASE sitio_web CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -263,9 +289,9 @@ La base se administra y verifica desde phpMyAdmin (puerto 8080).
 ### 4. Clonar el proyecto desde GitHub
 
 ```
-cd ~
-git clone https://github.com/david123hi/sitio_web.git
-cd sitio_web
+cd /var/www
+git clone https://github.com/david123hi/sitio_web.git negocio
+cd negocio
 ```
 
 ### 5. Entorno virtual y dependencias
@@ -300,7 +326,7 @@ DB_HOST=localhost
 DB_PORT=3306
 ```
 
-### 7. Migraciones, datos y superusuario
+### 7. Migraciones, datos, archivos estáticos y superusuario
 
 ```
 python manage.py migrate
@@ -308,34 +334,43 @@ python manage.py cargar_articulos
 python manage.py cargar_destinos
 python manage.py cargar_cursos
 python manage.py cargar_restaurantes
+python manage.py collectstatic --noinput
 python manage.py createsuperuser
 ```
 
 Los viajes, viajeros, alertas y vacunas se crean después desde `/admin/`, siguiendo el orden
 indicado en la sección *Datos de viajes y alertas*, ya que dependen de los destinos cargados.
 
-### 8. Ejecutar el servidor
+### 8. Servicios
 
-Para que el sitio siga activo aunque se cierre la sesión SSH, ejecutarlo dentro de `tmux`:
+Gunicorn, Nginx, MariaDB y PHP-FPM quedan habilitados para iniciar con el sistema:
 
 ```
-tmux new -s django
-python manage.py runserver 0.0.0.0:8000
+sudo systemctl enable --now gunicorn nginx mariadb php-fpm
+sudo systemctl status gunicorn nginx mariadb php-fpm
 ```
 
-Para salir sin detenerlo: `Ctrl + B` y luego `D`. Para volver: `tmux attach -t django`.
+### 9. Actualizar el sitio con cambios de GitHub
 
-> El sitio se publica en el puerto 80 de la instancia. Ajustar esta sección al
-> método usado en el despliegue (por ejemplo, un servidor web como proxy hacia Django).
+```
+cd /var/www/negocio
+git pull origin main
+source venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+sudo systemctl restart gunicorn
+```
 
-### 9. Reinicio de la instancia
+### 10. Reinicio de la instancia
 
 En AWS Academy el laboratorio detiene la instancia al terminar la sesión. Los datos y
-la IP elástica se conservan, pero el proceso de Django se detiene. Para reanudar:
-iniciar el laboratorio, iniciar la instancia en EC2, conectarse por SSH y volver a
-ejecutar el servidor dentro de `tmux` como en el paso anterior.
+la IP elástica se conservan y los servicios arrancan solos. Para reanudar basta con
+iniciar el laboratorio y la instancia en EC2, esperar a que pasen las comprobaciones de
+estado y abrir el sitio. Si algo no responde, revisar los servicios con
+`sudo systemctl status gunicorn nginx mariadb php-fpm` y reiniciar el que esté detenido.
 
-### 10. Verificación en phpMyAdmin
+### 11. Verificación en phpMyAdmin
 
 En la base `sitio_web` deben existir las 14 tablas propias:
 `blog_categoria`, `blog_articulo`, `destinos_continente`, `destinos_destino`,
