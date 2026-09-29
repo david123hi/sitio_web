@@ -1,42 +1,56 @@
 # Sitio Informativo — Proyecto Django
 
-**Evaluación Sumativa #2 — Aplicación web con Django Admin**
+**Evaluación Sumativa N°2 — Aplicación web con Django Admin**
 Asignatura: Programación Back End (TI3041) · INACAP sede La Serena
-Repositorio: https://github.com/david123hi/sitio_web
+Repositorio: <https://github.com/david123hi/sitio_web>
+
+## Integrantes y responsabilidades
+
+| Integrante                        | Módulos (aplicaciones Django) a cargo |
+| --------------------------------- | ------------------------------------- |
+| Brian David Monroy Araya          | `blog`, `destinos`                    |
+| Diego Alexis Carvajal Cerda       | `restaurantes`, `cursos`              |
+| Fernando Nicolás Bernales Ibáñez  | `travelers`, `travel_advisories`      |
 
 ## Descripción del proyecto
 
 ### Objetivo
+
 Evolucionar el sitio web modular de la Evaluación Sumativa N°1, que leía su
-información desde archivos JSON, hacia una aplicación web funcional con
-**base de datos relacional**, administrable desde **Django Admin** y
-desplegada en infraestructura cloud (**AWS EC2**), usando **Git y GitHub**
-como control de versiones y mecanismo de distribución.
+información desde archivos JSON, hacia una aplicación web funcional con **base de datos relacional**, administrable desde **Django Admin** y
+desplegada en infraestructura cloud (**AWS EC2**), usando **Git y GitHub** como control de versiones y mecanismo de distribución.
 
 ### Temática
-Sitio informativo con dos módulos independientes:
+
+Sitio informativo con seis módulos (aplicaciones Django) independientes:
 
 - **blog**: artículos de tecnología clasificados por categoría.
 - **destinos**: destinos de viaje clasificados por continente.
+- **cursos**: catálogo de cursos online agrupados por área de conocimiento.
+- **restaurantes**: guía de restaurantes agrupados por tipo de cocina.
+- **travelers**: viajes programados hacia un destino, viajeros y su participación en cada viaje.
+- **travel_advisories**: alertas de viaje por destino y requisitos de vacunación.
 
 ### Funcionalidades implementadas
-- Modelos Django con relaciones (`ForeignKey`) y migraciones.
+
+- Modelos Django con relaciones (`ForeignKey`) y migraciones en las seis aplicaciones (14 tablas propias).
 - Migración completa de los datos JSON hacia la base de datos
-  (comandos `cargar_articulos` y `cargar_destinos`).
+(comandos `cargar_articulos`, `cargar_destinos`, `cargar_cursos` y `cargar_restaurantes`).
 - Todas las entidades registradas en Django Admin (crear, modificar,
-  eliminar, visualizar, buscar y navegar entre entidades relacionadas).
+eliminar, visualizar, buscar y navegar entre entidades relacionadas).
 - Vistas que obtienen la información mediante consultas Django ORM y la
-  muestran con plantillas Django y Bootstrap (tarjetas y tablas).
-- Filtro por categoría/continente y búsqueda por nombre en los listados.
+muestran con plantillas Django y Bootstrap (tarjetas y tablas).
+- Filtro por categoría, continente, área o tipo de cocina, y búsqueda por nombre en los listados de los módulos con filtros.
 - Barra de navegación Bootstrap entre los módulos.
 - Botones **Agregar, Modificar, Eliminar y Buscar** visibles en cada
-  listado (marcadores visuales con enlace `#`; su funcionamiento real se
-  implementa en la siguiente evaluación sumativa).
+listado (marcadores visuales con enlace `#`; su funcionamiento real se
+implementa en la siguiente evaluación sumativa).
 - Configuración sensible fuera del código, mediante variables de entorno.
 
 ## Arquitectura
 
 ### Estructura de carpetas
+
 ```
 sitio_web/
 ├── manage.py
@@ -47,59 +61,91 @@ sitio_web/
 ├── templates/            # plantilla base global (base.html)
 ├── static/               # Bootstrap local y estilos propios
 ├── data/                 # JSON originales de la Evaluación N°1 (origen de datos)
-├── blog/                 # app 1
-│   ├── models.py         # Categoria, Articulo
-│   ├── admin.py
-│   ├── views.py / urls.py
-│   ├── migrations/
-│   ├── templates/blog/
-│   └── management/commands/cargar_articulos.py
-└── destinos/             # app 2
-    ├── models.py         # Continente, Destino
-    ├── admin.py
-    ├── views.py / urls.py
-    ├── migrations/
-    ├── templates/destinos/
-    └── management/commands/cargar_destinos.py
+├── blog/                 # app 1: Categoria, Articulo
+├── destinos/             # app 2: Continente, Destino
+├── cursos/               # app 3: Area, Curso
+├── restaurantes/         # app 4: TipoCocina, Restaurante
+├── travelers/            # app 5: Viaje, Viajero, Participacion
+└── travel_advisories/    # app 6: Alerta, Vacuna, RequisitoVacuna
 ```
 
+Cada aplicación contiene su propio `models.py`, `admin.py`, `views.py`, `urls.py`,
+carpeta `migrations/` y sus plantillas. Las aplicaciones `blog`, `destinos`, `cursos` y
+`restaurantes` incluyen además un comando `management/commands/cargar_*.py` que migra
+los datos desde `data/*.json` hacia la base de datos.
+
 ### Base de datos y modelo de datos
+
 - **Local (desarrollo):** SQLite, para poder ejecutar el proyecto sin instalar nada.
-- **EC2 (producción):** MySQL, administrado y verificado desde phpMyAdmin.
+- **EC2 (producción):** MySQL/MariaDB, administrado y verificado desde phpMyAdmin.
 
 El motor se elige solo con variables de entorno; el código no cambia.
 
-| App | Tabla | Finalidad | Relación |
-|---|---|---|---|
-| blog | `blog_categoria` | Clasifica los artículos (Backend, Frontend, IA) | 1 categoría → N artículos |
-| blog | `blog_articulo` | Guarda cada artículo (título, autor, fecha, contenido) | FK a `Categoria` |
-| destinos | `destinos_continente` | Clasifica los destinos (Asia, Europa, ...) | 1 continente → N destinos |
-| destinos | `destinos_destino` | Guarda cada destino (país, precio, duración) | FK a `Continente` |
+### Tablas y finalidad
 
-Las llaves foráneas usan `on_delete=PROTECT`, por lo que no se puede eliminar
-una categoría o continente que aún tenga registros asociados.
+| App               | Tabla                                 | Finalidad                                                          |
+| ----------------- | ------------------------------------- | ------------------------------------------------------------------ |
+| blog              | `blog_categoria`                      | Clasifica los artículos (Backend, Frontend, IA)                    |
+| blog              | `blog_articulo`                       | Guarda cada artículo (título, autor, fecha, contenido)             |
+| destinos          | `destinos_continente`                 | Clasifica los destinos (Asia, Europa, ...)                         |
+| destinos          | `destinos_destino`                    | Guarda cada destino (país, precio, duración)                       |
+| cursos            | `cursos_area`                         | Agrupa los cursos por área de conocimiento                         |
+| cursos            | `cursos_curso`                        | Guarda cada curso (instructor, nivel, horas, precio)               |
+| restaurantes      | `restaurantes_tipococina`             | Clasifica los restaurantes por tipo de cocina                      |
+| restaurantes      | `restaurantes_restaurante`            | Guarda cada restaurante (ciudad, dirección, precio, calificación)  |
+| travelers         | `travelers_viaje`                     | Viaje programado hacia un destino (fechas, cupos, estado)          |
+| travelers         | `travelers_viajero`                   | Persona que puede participar en viajes (nombre, correo)            |
+| travelers         | `travelers_participacion`             | Une viajes y viajeros indicando rol y estado de la participación   |
+| travel_advisories | `travel_advisories_alerta`            | Alerta de viaje asociada a un destino (nivel, vigencia)            |
+| travel_advisories | `travel_advisories_vacuna`            | Catálogo de vacunas                                                |
+| travel_advisories | `travel_advisories_requisitovacuna`   | Indica qué vacuna exige o recomienda cada alerta                   |
+
+### Relaciones entre tablas
+
+| Relación                                                        | Tipo                          | `on_delete` |
+| --------------------------------------------------------------- | ----------------------------- | ----------- |
+| `Articulo` → `Categoria`                                        | N:1 (1 categoría → N artículos) | `PROTECT`   |
+| `Destino` → `Continente`                                        | N:1                           | `PROTECT`   |
+| `Curso` → `Area`                                                | N:1                           | `PROTECT`   |
+| `Restaurante` → `TipoCocina`                                    | N:1                           | `PROTECT`   |
+| `Viaje` → `Destino` (de la app destinos)                        | N:1                           | `CASCADE`   |
+| `Participacion` → `Viaje` y `Participacion` → `Viajero`         | N:1 y N:1 (tabla intermedia)  | `CASCADE`   |
+| `Alerta` → `Destino` (de la app destinos)                       | N:1                           | `CASCADE`   |
+| `RequisitoVacuna` → `Alerta` y `RequisitoVacuna` → `Vacuna`     | N:1 y N:1 (tabla intermedia)  | `CASCADE`   |
+
+Resumen de las relaciones:
+
+- **Viajes y viajeros** forman una relación muchos a muchos: un viaje tiene varios
+  viajeros y un viajero puede ir a varios viajes. La tabla `travelers_participacion`
+  la resuelve y agrega el rol (organizador, viajero, invitado) y el estado (confirmado,
+  pendiente, no viaja).
+- **Alertas y vacunas** también son muchos a muchos, resueltos por `travel_advisories_requisitovacuna`,
+  que indica si la vacuna es obligatoria o recomendada.
+- Los módulos `travelers` y `travel_advisories` se conectan con `destinos` mediante llaves foráneas
+  hacia `destinos_destino`.
+- En `blog`, `destinos`, `cursos` y `restaurantes` las llaves foráneas usan `on_delete=PROTECT`, por lo que no se
+  puede eliminar una categoría, continente, área o tipo de cocina que aún tenga registros asociados.
 
 ## Variables de entorno
 
-Las configuraciones sensibles (`SECRET_KEY`, credenciales de la base de datos)
-**no están escritas en el código**: se cargan desde un archivo `.env` con la
+Las configuraciones sensibles (`SECRET_KEY`, credenciales de la base de datos) **no están escritas en el código**: se cargan desde un archivo `.env` con la
 librería `python-decouple`.
 
 - `.env` contiene los valores reales y **no se sube a GitHub** (está en `.gitignore`).
 - `.env.example` es la plantilla que sí se versiona.
 - Quien clone el repositorio debe **crear su propio `.env`** copiando `.env.example`.
 
-| Variable | Descripción |
-|---|---|
-| `SECRET_KEY` | Clave secreta de Django |
-| `DEBUG` | `True` en desarrollo/demostración |
-| `ALLOWED_HOSTS` | Hosts permitidos, separados por coma (en EC2 incluir la IP pública) |
-| `DB_ENGINE` | `django.db.backends.sqlite3` (local) o `django.db.backends.mysql` (EC2) |
-| `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` | Conexión a la base de datos |
+| Variable                                                  | Descripción                                                             |
+| --------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `SECRET_KEY`                                              | Clave secreta de Django                                                 |
+| `DEBUG`                                                   | `True` en desarrollo/demostración                                       |
+| `ALLOWED_HOSTS`                                           | Hosts permitidos, separados por coma (en EC2 incluir la IP pública)     |
+| `DB_ENGINE`                                               | `django.db.backends.sqlite3` (local) o `django.db.backends.mysql` (EC2) |
+| `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` | Conexión a la base de datos                                             |
 
 ## Ejecución local
 
-```bash
+```
 # 1. Clonar el repositorio
 git clone https://github.com/david123hi/sitio_web.git
 cd sitio_web
@@ -122,6 +168,8 @@ python manage.py migrate
 # 6. Migrar los datos de los JSON hacia la base de datos
 python manage.py cargar_articulos
 python manage.py cargar_destinos
+python manage.py cargar_cursos
+python manage.py cargar_restaurantes
 
 # 7. Crear el superusuario de Django Admin
 python manage.py createsuperuser
@@ -130,78 +178,120 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-> En Windows, `pip install -r requirements.txt` puede fallar al instalar
-> `mysqlclient`. Solo se necesita para MySQL (EC2); en local con SQLite se
+> En Windows, `pip install -r requirements.txt` puede fallar al instalar `mysqlclient`. Solo se necesita para MySQL (EC2); en local con SQLite se
 > puede omitir instalando manualmente `Django` y `python-decouple`.
 
-Rutas del sitio:
+Los datos de `travelers` (viajes, viajeros y participaciones) y de `travel_advisories`
+(alertas, vacunas y requisitos) se ingresan desde Django Admin. Ver la sección
+*Datos de viajes y alertas*.
 
-| Ruta | Descripción |
-|---|---|
-| `/` | Inicio (app blog) |
-| `/articulos/` | Listado de artículos (filtro y buscador) |
-| `/articulos/<id>/` | Detalle de un artículo |
-| `/destinos/` | Listado de destinos (filtro y buscador) |
-| `/destinos/<slug>/` | Detalle de un destino |
-| `/admin/` | Django Admin (CRUD completo) |
+### Rutas del sitio
 
-## Despliegue en AWS EC2 (Ubuntu Linux)
+| Ruta                          | Descripción                                        |
+| ----------------------------- | -------------------------------------------------- |
+| `/`                           | Inicio (app blog)                                  |
+| `/articulos/`                 | Listado de artículos (filtro y buscador)           |
+| `/articulos/<id>/`            | Detalle de un artículo                             |
+| `/destinos/`                  | Listado de destinos (filtro y buscador)            |
+| `/destinos/<slug>/`           | Detalle de un destino                              |
+| `/cursos/`                    | Listado de cursos                                  |
+| `/cursos/<id>/`               | Detalle de un curso                                |
+| `/restaurantes/`              | Listado de restaurantes                            |
+| `/restaurantes/<slug>/`       | Detalle de un restaurante                          |
+| `/viajes/`                    | Listado de viajes                                  |
+| `/viajes/viajeros/`           | Listado de viajeros                                |
+| `/viajes/<id>/`               | Detalle de un viaje y sus participantes            |
+| `/travel_advisories/`         | Listado de alertas de viaje                        |
+| `/admin/`                     | Django Admin (CRUD completo de las 14 tablas)      |
+
+### Datos de viajes y alertas
+
+Estos módulos no parten de archivos JSON. Se crean desde `/admin/` respetando el
+orden de dependencias entre tablas:
+
+1. Viajeros
+2. Viajes (requiere un destino ya cargado)
+3. Participaciones (requiere un viaje y un viajero)
+4. Vacunas
+5. Alertas (requiere un destino ya cargado)
+6. Requisitos de vacunas (requiere una alerta y una vacuna)
+
+Con 2 o 3 registros por tabla basta para demostrar las relaciones. Los mismos pasos se
+repiten en la instancia EC2 después de ejecutar las migraciones y los comandos `cargar_*`.
+
+## Despliegue en AWS EC2 (Amazon Linux)
+
+### Sitio desplegado
+
+La instancia tiene una **IP elástica**, por lo que la dirección no cambia aunque la
+instancia se detenga y se vuelva a iniciar.
+
+- **Sitio:** <http://34.237.28.226/>
+- **Django Admin:** <http://34.237.28.226/admin/>
+- **phpMyAdmin:** <http://34.237.28.226:8080/>
+
+> Las credenciales de acceso se entregan en el Documento Técnico.
 
 ### 1. Instancia y acceso
-En el *Security Group* de la instancia abrir los puertos **22** (SSH),
-**80** (phpMyAdmin) y **8000** (Django).
 
-```bash
-ssh -i "clave.pem" ubuntu@IP_PUBLICA_EC2
+En el *Security Group* de la instancia abrir el puerto **22** (SSH, idealmente solo desde la IP propia), **80** (sitio Django), **8080** (phpMyAdmin, idealmente restringido a la IP propia) y **8000** si se usa `runserver` en ese puerto. No se abre el puerto 3306: la base de datos solo acepta conexiones locales.
+
+```
+ssh -i "clave.pem" ec2-user@34.237.28.226
 ```
 
 ### 2. Dependencias del sistema
-```bash
-sudo apt update
-sudo apt install -y python3-venv python3-pip git default-libmysqlclient-dev pkg-config build-essential mysql-server
+
+```
+sudo dnf update -y
+sudo dnf install -y python3 python3-pip git gcc python3-devel pkgconf-pkg-config mariadb105-devel tmux
 ```
 
-### 3. Base de datos MySQL
-```bash
-sudo mysql
+### 3. Base de datos
+
+Se utiliza MySQL/MariaDB, con una base `sitio_web` y un usuario dedicado para Django:
+
 ```
-```sql
 CREATE DATABASE sitio_web CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'django_user'@'localhost' IDENTIFIED BY 'UNA_CLAVE_SEGURA';
 GRANT ALL PRIVILEGES ON sitio_web.* TO 'django_user'@'localhost';
 FLUSH PRIVILEGES;
-EXIT;
 ```
 
-### 4. phpMyAdmin
-```bash
-sudo apt install -y apache2 php libapache2-mod-php php-mysql phpmyadmin
-```
-Se accede desde `http://IP_PUBLICA_EC2/phpmyadmin` con `django_user`.
+La base se administra y verifica desde phpMyAdmin (puerto 8080).
 
-### 5. Clonar el proyecto desde GitHub
-```bash
+### 4. Clonar el proyecto desde GitHub
+
+```
+cd ~
 git clone https://github.com/david123hi/sitio_web.git
 cd sitio_web
 ```
 
-### 6. Entorno virtual y dependencias
-```bash
+### 5. Entorno virtual y dependencias
+
+En Amazon Linux el comando es `python3` (fuera del entorno virtual no existe `python`).
+
+```
 python3 -m venv venv
 source venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 7. Variables de entorno
-```bash
+### 6. Variables de entorno
+
+```
 cp .env.example .env
 nano .env
 ```
+
 Valores a completar:
+
 ```
 SECRET_KEY=una-clave-larga-y-unica
 DEBUG=True
-ALLOWED_HOSTS=IP_PUBLICA_EC2,localhost
+ALLOWED_HOSTS=34.237.28.226,localhost
 DB_ENGINE=django.db.backends.mysql
 DB_NAME=sitio_web
 DB_USER=django_user
@@ -210,39 +300,70 @@ DB_HOST=localhost
 DB_PORT=3306
 ```
 
-### 8. Migraciones, datos y superusuario
-```bash
+### 7. Migraciones, datos y superusuario
+
+```
 python manage.py migrate
 python manage.py cargar_articulos
 python manage.py cargar_destinos
+python manage.py cargar_cursos
+python manage.py cargar_restaurantes
 python manage.py createsuperuser
 ```
 
-### 9. Ejecutar el servidor
-```bash
+Los viajes, viajeros, alertas y vacunas se crean después desde `/admin/`, siguiendo el orden
+indicado en la sección *Datos de viajes y alertas*, ya que dependen de los destinos cargados.
+
+### 8. Ejecutar el servidor
+
+Para que el sitio siga activo aunque se cierre la sesión SSH, ejecutarlo dentro de `tmux`:
+
+```
+tmux new -s django
 python manage.py runserver 0.0.0.0:8000
 ```
-El sitio queda disponible en `http://IP_PUBLICA_EC2:8000/`.
+
+Para salir sin detenerlo: `Ctrl + B` y luego `D`. Para volver: `tmux attach -t django`.
+
+> El sitio se publica en el puerto 80 de la instancia. Ajustar esta sección al
+> método usado en el despliegue (por ejemplo, un servidor web como proxy hacia Django).
+
+### 9. Reinicio de la instancia
+
+En AWS Academy el laboratorio detiene la instancia al terminar la sesión. Los datos y
+la IP elástica se conservan, pero el proceso de Django se detiene. Para reanudar:
+iniciar el laboratorio, iniciar la instancia en EC2, conectarse por SSH y volver a
+ejecutar el servidor dentro de `tmux` como en el paso anterior.
 
 ### 10. Verificación en phpMyAdmin
-En la base `sitio_web` deben existir las tablas `blog_categoria`,
-`blog_articulo`, `destinos_continente` y `destinos_destino`, con sus
-registros y sus llaves foráneas (además de las tablas internas de Django).
+
+En la base `sitio_web` deben existir las 14 tablas propias:
+`blog_categoria`, `blog_articulo`, `destinos_continente`, `destinos_destino`,
+`cursos_area`, `cursos_curso`, `restaurantes_tipococina`, `restaurantes_restaurante`,
+`travelers_viaje`, `travelers_viajero`, `travelers_participacion`,
+`travel_advisories_alerta`, `travel_advisories_vacuna` y `travel_advisories_requisitovacuna`,
+con sus registros y sus llaves foráneas (además de las tablas internas de Django).
+Las relaciones se ven en la pestaña **Diseñador**.
 
 ## Control de versiones
 
 Todo el proyecto está versionado con Git y alojado en GitHub. El proyecto se
 obtiene en EC2 con:
 
-```bash
+```
 git clone https://github.com/david123hi/sitio_web.git
 ```
+
+El archivo `.gitignore` excluye el archivo `.env`, el entorno virtual (`venv/`),
+las bases de datos locales (`*.sqlite3`) y los archivos temporales de Python.
 
 ## Uso de Inteligencia Artificial
 
 Se utilizó IA como apoyo al desarrollo para: diseñar el modelo de datos
 relacional a partir de la estructura de los JSON originales, generar el
 código de modelos, administración y vistas, escribir el comando de migración
-de datos, y configurar las variables de entorno y el despliegue. Los prompts
-utilizados, las respuestas obtenidas y su aplicación en el proyecto se
-documentan en el Documento Técnico entregado junto al proyecto.
+de datos, corregir errores de migraciones (por ejemplo, el error
+`python: command not found` al desplegar en Amazon Linux) y configurar las
+variables de entorno y el despliegue. Los prompts utilizados, las respuestas
+obtenidas y su aplicación en el proyecto se documentan en el Documento Técnico
+entregado junto al proyecto.
