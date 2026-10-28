@@ -4,12 +4,13 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Viajes disponibles</h2>
-    <a href="#" class="btn btn-success">+ Agregar viaje</a>
+    <a href="{% url 'travelers:crear_viaje' %}" class="btn btn-success">+ Agregar viaje</a>
 </div>
 
-<form class="d-flex gap-2 mb-4" role="search" action="#" method="get">
-    <input type="text" name="q" class="form-control" placeholder="Buscar viaje por actividad...">
+<form class="d-flex gap-2 mb-4" role="search" action="{% url 'travelers:lista_viajes' %}" method="get">
+    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Buscar viaje por actividad, destino o país...">
     <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+    {% if q %}<a href="{% url 'travelers:lista_viajes' %}" class="btn btn-outline-dark">Limpiar</a>{% endif %}
 </form>
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -26,14 +27,14 @@
                     {% if viaje.estado == 'A' %} Abierto {% elif viaje.estado == 'C' %} Cerrado {% elif viaje.estado == 'F' %} Finalizado {% endif %}</div>
             </div>
             <div class="card-footer bg-white d-flex gap-2">
-                <a href="#" class="btn btn-sm btn-outline-primary">Modificar</a>
-                <a href="#" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                <a href="{% url 'travelers:editar_viaje' viaje.id %}" class="btn btn-sm btn-outline-primary">Modificar</a>
+                <a href="{% url 'travelers:eliminar_viaje' viaje.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
                 <a href="{% url 'travelers:detalle_viaje' viaje.id %}" class="btn btn-sm btn-primary ms-auto">Ver detalles</a>
             </div>
         </div>
     </div>
     {% empty %}
-    <p class="text-muted">Aún no hay viajes cargados en la base de datos.</p>
+    <p class="text-muted">{% if q %}No se encontraron viajes para "{{ q }}".{% else %}Aún no hay viajes cargados en la base de datos.{% endif %}</p>
     {% endfor %}
 </div>
 
