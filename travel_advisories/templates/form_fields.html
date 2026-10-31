@@ -1,0 +1,20 @@
+{% comment %}Renderiza los campos de un formulario Django con estilos Bootstrap. Uso: {% include 'partials/form_fields.html' with form=form %}{% endcomment %}
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+    {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+</div>
+{% endif %}
+{% for field in form %}
+<div class="mb-3">
+    {% if field.field.widget.input_type == 'checkbox' %}
+    <div class="form-check">
+        {{ field }}
+        <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+    </div>
+    {% else %}
+    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+    {% endif %}
+    {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+</div>
+{% endfor %}
