@@ -1,50 +1,53 @@
 {% extends 'base_gestion.html' %}
 {% block titulo %}Dashboard Supervisor{% endblock %}
 {% block contenido %}
-<h2 class="mb-1">Dashboard Supervisor</h2>
-<p class="text-muted">Información operacional. Puedes ver, agregar y modificar; la eliminación y la gestión de usuarios están reservadas al Administrador.</p>
+<section class="hero hero-sup">
+    <div>
+        <span class="rol-chip"><i class="bi bi-binoculars"></i> Perfil Supervisor</span>
+        <h1>Hola, {{ user.get_full_name|default:user.username }}</h1>
+        <p>Revisa la operación del día. Puedes ver, agregar y modificar; eliminar y gestionar usuarios queda para el Administrador.</p>
+    </div>
+    <div class="hero-actions">
+        <a class="btn btn-light" href="{% url 'travelers:programar_viaje' %}"><i class="bi bi-signpost-split"></i> Programar viaje</a>
+        <a class="btn btn-outline-light" href="{% url 'travelers:lista_viajes' %}"><i class="bi bi-airplane"></i> Ver viajes</a>
+    </div>
+</section>
 
-<div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
-    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajes_abiertos }}</div><div class="text-muted small">Viajes abiertos</div></div></div></div>
-    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajes_completos }}</div><div class="text-muted small">Viajes completos</div></div></div></div>
-    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ pendientes }}</div><div class="text-muted small">Participaciones pendientes</div></div></div></div>
-    <div class="col"><div class="card text-center shadow-sm border-danger"><div class="card-body"><div class="display-6">{{ alertas_graves }}</div><div class="text-muted small">Alertas altas/extremas vigentes</div></div></div></div>
+<div class="stat-grid">
+    <div class="stat"><span class="stat-ico tone-lagoon"><i class="bi bi-airplane"></i></span><div><div class="stat-num">{{ viajes_abiertos }}</div><div class="stat-lbl">Viajes abiertos</div></div></div>
+    <div class="stat"><span class="stat-ico tone-ink"><i class="bi bi-check2-circle"></i></span><div><div class="stat-num">{{ viajes_completos }}</div><div class="stat-lbl">Viajes completos</div></div></div>
+    <div class="stat"><span class="stat-ico tone-amber"><i class="bi bi-hourglass-split"></i></span><div><div class="stat-num">{{ pendientes }}</div><div class="stat-lbl">Participaciones pendientes</div></div></div>
+    <div class="stat"><span class="stat-ico tone-coral"><i class="bi bi-exclamation-octagon"></i></span><div><div class="stat-num">{{ alertas_graves }}</div><div class="stat-lbl">Alertas altas o extremas</div></div></div>
 </div>
 
 <div class="row g-4">
-    <div class="col-md-6">
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-dark text-white">Próximos viajes</div>
-            <ul class="list-group list-group-flush">
-                {% for v in proximos_viajes %}
-                <li class="list-group-item d-flex justify-content-between">
-                    <a href="{% url 'travelers:detalle_viaje' v.id %}">{{ v.actividad }}</a>
-                    <span class="text-muted small">{{ v.destino }} · {{ v.inicio }}</span>
-                </li>
-                {% empty %}<li class="list-group-item text-muted">No hay viajes próximos.</li>{% endfor %}
-            </ul>
+    <div class="col-lg-6">
+        <div class="panel">
+            <div class="panel-head"><i class="bi bi-calendar-event"></i> Próximos viajes</div>
+            {% for v in proximos_viajes %}
+            <div class="fila-info">
+                <a href="{% url 'travelers:detalle_viaje' v.id %}" class="fw-semibold text-decoration-none">{{ v.actividad }}</a>
+                <small>{{ v.destino }} · {{ v.inicio }}</small>
+            </div>
+            {% empty %}<div class="vacio"><i class="bi bi-calendar2-x"></i>No hay viajes próximos.</div>{% endfor %}
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-dark text-white">Alertas vigentes</div>
-            <ul class="list-group list-group-flush">
-                {% for a in alertas_activas %}
-                <li class="list-group-item d-flex justify-content-between">
-                    <a href="{% url 'travel_advisories:detalle_alerta' a.id %}">{{ a.titulo }}</a>
-                    <span class="text-muted small">{{ a.pais }} · {{ a.get_nivel_display }}</span>
-                </li>
-                {% empty %}<li class="list-group-item text-muted">No hay alertas vigentes.</li>{% endfor %}
-            </ul>
+    <div class="col-lg-6">
+        <div class="panel">
+            <div class="panel-head"><i class="bi bi-exclamation-triangle"></i> Alertas vigentes</div>
+            {% for a in alertas_activas %}
+            <div class="fila-info">
+                <a href="{% url 'travel_advisories:detalle_alerta' a.id %}" class="fw-semibold text-decoration-none">{{ a.titulo }}</a>
+                <small>{{ a.pais }} · {{ a.get_nivel_display }}</small>
+            </div>
+            {% empty %}<div class="vacio"><i class="bi bi-shield-check"></i>No hay alertas vigentes.</div>{% endfor %}
         </div>
     </div>
 </div>
 
 <div class="mt-4 d-flex flex-wrap gap-2">
-    <a class="btn btn-primary" href="{% url 'travelers:programar_viaje' %}">Programar viaje</a>
-    <a class="btn btn-outline-primary" href="{% url 'travelers:lista_viajes' %}">Viajes</a>
-    <a class="btn btn-outline-primary" href="{% url 'travelers:viajero_lista' %}">Viajeros</a>
-    <a class="btn btn-outline-primary" href="{% url 'travel_advisories:lista_alerta' %}">Alertas</a>
-    <a class="btn btn-outline-primary" href="{% url 'travel_advisories:vacuna_lista' %}">Vacunas</a>
+    <a class="btn btn-outline-primary" href="{% url 'travelers:viajero_lista' %}"><i class="bi bi-person-badge"></i> Viajeros</a>
+    <a class="btn btn-outline-primary" href="{% url 'travel_advisories:lista_alerta' %}"><i class="bi bi-exclamation-triangle"></i> Alertas</a>
+    <a class="btn btn-outline-primary" href="{% url 'travel_advisories:vacuna_lista' %}"><i class="bi bi-shield-plus"></i> Vacunas</a>
 </div>
 {% endblock %}

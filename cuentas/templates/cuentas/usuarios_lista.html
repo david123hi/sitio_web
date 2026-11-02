@@ -1,37 +1,50 @@
 {% extends 'base_gestion.html' %}
 {% block titulo %}Usuarios{% endblock %}
 {% block contenido %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Usuarios</h2>
-    {% if perms.auth.add_user %}<a href="{% url 'cuentas:usuario_crear' %}" class="btn btn-success">+ Crear usuario</a>{% endif %}
+<div class="page-head">
+    <div>
+        <h1 class="page-title">Usuarios</h1>
+        <p class="page-sub">{% with total=usuarios|length %}{{ total }} usuario{{ total|pluralize }}{% endwith %}{% if q %} para «{{ q }}»{% endif %}. Cada uno pertenece a un perfil que define lo que puede hacer.</p>
+    </div>
+    {% if perms.auth.add_user %}<a href="{% url 'cuentas:usuario_crear' %}" class="btn btn-success"><i class="bi bi-person-plus"></i> Crear usuario</a>{% endif %}
 </div>
-<form class="d-flex gap-2 mb-4" role="search" method="get" action="{% url 'cuentas:usuarios' %}">
-    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Buscar por usuario, nombre o correo...">
-    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+<form class="d-flex gap-2 mb-3" role="search" method="get" action="{% url 'cuentas:usuarios' %}">
+    <div class="buscador">
+        <i class="bi bi-search"></i>
+        <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Buscar por usuario, nombre o correo...">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
     {% if q %}<a href="{% url 'cuentas:usuarios' %}" class="btn btn-outline-dark">Limpiar</a>{% endif %}
 </form>
-<div class="table-responsive">
-<table class="table table-hover bg-white shadow-sm">
-    <thead class="table-dark">
-        <tr><th>Usuario</th><th>Nombre</th><th>Correo</th><th>Perfil</th><th>Estado</th><th>Acciones</th></tr>
+<div class="tabla-wrap table-responsive">
+<table class="table table-hover">
+    <thead>
+        <tr><th>Usuario</th><th>Correo</th><th>Perfil</th><th>Estado</th><th>Acciones</th></tr>
     </thead>
     <tbody>
         {% for u in usuarios %}
         <tr>
-            <td>{{ u.username }}{% if u.is_superuser %} <span class="badge bg-dark">superusuario</span>{% endif %}</td>
-            <td>{{ u.get_full_name|default:"—" }}</td>
-            <td>{{ u.email|default:"—" }}</td>
-            <td>{% for g in u.groups.all %}<span class="badge bg-primary">{{ g.name }}</span> {% empty %}<span class="text-muted">Sin perfil</span>{% endfor %}</td>
-            <td>{% if u.is_active %}<span class="badge bg-success">Activo</span>{% else %}<span class="badge bg-secondary">Inactivo</span>{% endif %}</td>
             <td>
-                <div class="d-flex gap-2">
-                    {% if perms.auth.change_user %}<a href="{% url 'cuentas:usuario_editar' u.pk %}" class="btn btn-sm btn-outline-primary">Modificar</a>{% endif %}
-                    {% if perms.auth.delete_user and u != request.user and not u.is_superuser %}<a href="{% url 'cuentas:usuario_eliminar' u.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>{% endif %}
+                <div class="usuario-cel">
+                    <span class="avatar">{{ u.username|slice:":2"|upper }}</span>
+                    <div>
+                        <strong>{{ u.username }}</strong>{% if u.is_superuser %} <span class="badge bg-dark">superusuario</span>{% endif %}
+                        <div class="small text-muted">{{ u.get_full_name|default:"Sin nombre" }}</div>
+                    </div>
+                </div>
+            </td>
+            <td>{{ u.email|default:"—" }}</td>
+            <td>{% for g in u.groups.all %}<span class="badge badge-rol rol-{{ g.name|lower }}">{{ g.name }}</span> {% empty %}<span class="text-muted">Sin perfil</span>{% endfor %}</td>
+            <td>{% if u.is_active %}<span class="estado-punto">Activo</span>{% else %}<span class="estado-punto inactivo">Inactivo</span>{% endif %}</td>
+            <td>
+                <div class="acciones">
+                    {% if perms.auth.change_user %}<a href="{% url 'cuentas:usuario_editar' u.pk %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i> Modificar</a>{% endif %}
+                    {% if perms.auth.delete_user and u != request.user and not u.is_superuser %}<a href="{% url 'cuentas:usuario_eliminar' u.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i> Eliminar</a>{% endif %}
                 </div>
             </td>
         </tr>
         {% empty %}
-        <tr><td colspan="6" class="text-muted">No se encontraron usuarios.</td></tr>
+        <tr><td colspan="5"><div class="vacio"><i class="bi bi-people"></i>No se encontraron usuarios.</div></td></tr>
         {% endfor %}
     </tbody>
 </table>

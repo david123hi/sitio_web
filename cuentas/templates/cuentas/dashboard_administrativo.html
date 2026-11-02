@@ -1,25 +1,45 @@
 {% extends 'base_gestion.html' %}
 {% block titulo %}Dashboard Administrativo{% endblock %}
 {% block contenido %}
-<h2 class="mb-1">Dashboard Administrativo</h2>
+<section class="hero hero-adm">
+    <div>
+        <span class="rol-chip"><i class="bi bi-person-workspace"></i> Perfil Administrativo</span>
+        <h1>Hola, {{ user.get_full_name|default:user.username }}</h1>
+        <p>{% if sin_perfil %}Tu usuario aún no tiene un perfil asignado.{% else %}Registra viajeros e inscripciones y consulta la información del día.{% endif %}</p>
+    </div>
+    {% if perms.travelers.add_viajero %}
+    <div class="hero-actions">
+        <a class="btn btn-light" href="{% url 'travelers:viajero_crear' %}"><i class="bi bi-person-plus"></i> Registrar viajero</a>
+    </div>
+    {% endif %}
+</section>
+
 {% if sin_perfil %}
-<div class="alert alert-warning">Tu usuario aún no tiene un perfil asignado. Pide a un Administrador que te asigne uno.</div>
-{% else %}
-<p class="text-muted">Acceso solo a las funcionalidades asignadas. Las operaciones críticas (modificar y eliminar) están restringidas.</p>
+<div class="alert alert-warning">Pide a un Administrador que te asigne un perfil para poder usar el sistema.</div>
 {% endif %}
 
-<div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
-    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajes_abiertos }}</div><div class="text-muted small">Viajes abiertos</div></div></div></div>
-    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajeros }}</div><div class="text-muted small">Viajeros registrados</div></div></div></div>
+<div class="stat-grid" style="max-width:560px;">
+    <div class="stat"><span class="stat-ico tone-lagoon"><i class="bi bi-airplane"></i></span><div><div class="stat-num">{{ viajes_abiertos }}</div><div class="stat-lbl">Viajes abiertos</div></div></div>
+    <div class="stat"><span class="stat-ico tone-ocean"><i class="bi bi-person-badge"></i></span><div><div class="stat-num">{{ viajeros }}</div><div class="stat-lbl">Viajeros registrados</div></div></div>
 </div>
 
-<div class="card shadow-sm">
-    <div class="card-header bg-dark text-white">Mis funcionalidades</div>
-    <div class="list-group list-group-flush">
-        {% if perms.travelers.add_viajero %}<a class="list-group-item list-group-item-action" href="{% url 'travelers:viajero_crear' %}">Registrar un viajero</a>{% endif %}
-        {% if perms.travelers.view_viaje %}<a class="list-group-item list-group-item-action" href="{% url 'travelers:lista_viajes' %}">Consultar viajes e inscribir participantes</a>{% endif %}
-        {% if perms.travelers.view_viajero %}<a class="list-group-item list-group-item-action" href="{% url 'travelers:viajero_lista' %}">Consultar viajeros</a>{% endif %}
-        {% if perms.travel_advisories.view_alerta %}<a class="list-group-item list-group-item-action" href="{% url 'travel_advisories:lista_alerta' %}">Consultar alertas de viaje</a>{% endif %}
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="panel">
+            <div class="panel-head"><i class="bi bi-check2-square"></i> Mis funcionalidades</div>
+            {% if perms.travelers.add_viajero %}<a class="quick-item" href="{% url 'travelers:viajero_crear' %}"><span class="qi"><i class="bi bi-person-plus"></i></span>Registrar un viajero<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.travelers.view_viaje %}<a class="quick-item" href="{% url 'travelers:lista_viajes' %}"><span class="qi"><i class="bi bi-airplane"></i></span>Consultar viajes e inscribir participantes<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.travelers.view_viajero %}<a class="quick-item" href="{% url 'travelers:viajero_lista' %}"><span class="qi"><i class="bi bi-person-badge"></i></span>Consultar viajeros<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.travel_advisories.view_alerta %}<a class="quick-item" href="{% url 'travel_advisories:lista_alerta' %}"><span class="qi"><i class="bi bi-exclamation-triangle"></i></span>Consultar alertas de viaje<i class="bi bi-chevron-right"></i></a>{% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel">
+            <div class="panel-head"><i class="bi bi-lock"></i> Operaciones restringidas</div>
+            <div class="quick-item bloqueado"><span class="qi"><i class="bi bi-pencil-square"></i></span>Modificar registros existentes<span class="ms-auto small">Supervisor o Administrador</span></div>
+            <div class="quick-item bloqueado"><span class="qi"><i class="bi bi-trash3"></i></span>Eliminar registros<span class="ms-auto small">Administrador</span></div>
+            <div class="quick-item bloqueado"><span class="qi"><i class="bi bi-people"></i></span>Gestionar usuarios<span class="ms-auto small">Administrador</span></div>
+        </div>
     </div>
 </div>
 {% endblock %}

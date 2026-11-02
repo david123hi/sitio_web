@@ -1,20 +1,32 @@
 {% extends 'base_gestion.html' %}
 {% block titulo %}{{ titulo }}{% endblock %}
 {% block contenido %}
-<div class="row justify-content-center">
-    <div class="col-md-7">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <h2 class="h4 mb-4">{{ titulo }}</h2>
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    {% include 'partials/form_fields.html' with form=form %}
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-success">Guardar</button>
-                        <a href="{% url 'cuentas:usuarios' %}" class="btn btn-outline-secondary">Cancelar</a>
-                    </div>
-                </form>
+<div class="row g-4 justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-sm form-card">
+            <div class="form-card-head">
+                <span class="ico"><i class="bi bi-person-plus"></i></span>
+                <div>
+                    <h1>{{ titulo }}</h1>
+                    <p>El perfil que elijas define qué puede ver y hacer en el sistema.</p>
+                </div>
             </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% include 'partials/form_fields.html' with form=form %}
+                <div class="d-flex gap-2 pt-2">
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check2-circle"></i> Guardar usuario</button>
+                    <a href="{% url 'cuentas:usuarios' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card shadow-sm perfil-info">
+            <h2>¿Qué puede hacer cada perfil?</h2>
+            <div class="item"><span class="dot rol-administrador"></span><div><strong>Administrador</strong><span class="txt">Acceso total: ver, agregar, modificar y eliminar. Gestiona usuarios.</span></div></div>
+            <div class="item"><span class="dot rol-supervisor"></span><div><strong>Supervisor</strong><span class="txt">Ve, agrega y modifica. No elimina ni gestiona usuarios.</span></div></div>
+            <div class="item"><span class="dot rol-administrativo"></span><div><strong>Administrativo</strong><span class="txt">Consulta todo y registra viajeros e inscripciones. No modifica ni elimina.</span></div></div>
         </div>
     </div>
 </div>

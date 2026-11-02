@@ -1,0 +1,24 @@
+{% extends 'base_gestion.html' %}
+{# Pantallas de acceso: sin barra superior, con panel de marca a la izquierda #}
+{% block barra %}{% endblock %}
+{% block pie %}{% endblock %}
+{% block contenedor %}
+<div class="auth-wrap">
+    <aside class="auth-aside">
+        <div class="brand navbar-brand text-white fs-5">
+            <span class="brand-mark"><i class="bi bi-airplane-fill"></i></span>Viajes Juanito
+        </div>
+        <div>
+            <h2>Cada viaje, bien organizado.</h2>
+            <p>Gestiona viajes, viajeros, alertas y requisitos de vacunación desde un solo lugar.</p>
+        </div>
+        <small class="text-white-50">INACAP · Programación Back End</small>
+    </aside>
+    <main class="auth-main">
+        <div class="auth-card">
+            {% include 'partials/mensajes.html' %}
+            {% block contenido %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% endblock %}

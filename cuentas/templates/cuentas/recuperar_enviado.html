@@ -1,16 +1,8 @@
-{% extends 'base_gestion.html' %}
+{% extends 'base_auth.html' %}
 {% block titulo %}Correo enviado{% endblock %}
 {% block contenido %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body p-4 text-center">
-                <h2 class="h4 mb-3">Revisa tu correo</h2>
-                <p>Si el correo ingresado corresponde a una cuenta activa, te enviamos un enlace para restablecer tu contraseña.
-                   El enlace es de un solo uso y vence en 1 hora.</p>
-                <a href="{% url 'cuentas:login' %}" class="btn btn-primary">Volver al inicio de sesión</a>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="icono-estado tone-ocean"><i class="bi bi-envelope-check"></i></div>
+<h1>Revisa tu correo</h1>
+<p class="sub">Si el correo corresponde a una cuenta activa, te enviamos un enlace para restablecer tu contraseña. Es de un solo uso y vence en 1 hora. Si no lo ves, revisa la carpeta de spam.</p>
+<a href="{% url 'cuentas:login' %}" class="btn btn-primary w-100 py-2">Volver al inicio de sesión</a>
 {% endblock %}
