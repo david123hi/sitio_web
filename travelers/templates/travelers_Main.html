@@ -4,7 +4,12 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Viajes disponibles</h2>
-    <a href="{% url 'travelers:crear_viaje' %}" class="btn btn-success">+ Agregar viaje</a>
+    <div class="d-flex gap-2">
+        {% if perms.travelers.add_viaje and perms.travelers.add_participacion %}
+        <a href="{% url 'travelers:programar_viaje' %}" class="btn btn-primary">Programar viaje con organizador</a>
+        {% endif %}
+        {% if perms.travelers.add_viaje %}<a href="{% url 'travelers:crear_viaje' %}" class="btn btn-success">+ Agregar viaje</a>{% endif %}
+    </div>
 </div>
 
 <form class="d-flex gap-2 mb-4" role="search" action="{% url 'travelers:lista_viajes' %}" method="get">
@@ -22,14 +27,13 @@
                 <h6 class="card-subtitle mb-2 text-muted">
                     {{ viaje.destino }} · inicia el {{ viaje.inicio }} - termina el {{ viaje.fin }}
                 </h6>
-                <p class="card-text">{{ viaje.cupos_disponibles }} cupos disponibles</p>
-                <div class="badge {% if viaje.estado == 'A' %} bg-success {% elif viaje.estado == 'C' %} bg-secondary {% elif viaje.estado == 'F' %} bg-danger {% endif %} mb-2">
-                    {% if viaje.estado == 'A' %} Abierto {% elif viaje.estado == 'C' %} Cerrado {% elif viaje.estado == 'F' %} Finalizado {% endif %}</div>
+                <p class="card-text">{{ viaje.cupos_disponibles }} cupos disponibles de {{ viaje.cupos }}</p>
+                <span class="badge {% if viaje.estado == 'A' %}bg-success{% elif viaje.estado == 'C' %}bg-secondary{% else %}bg-danger{% endif %} mb-2">{{ viaje.get_estado_display }}</span>
             </div>
             <div class="card-footer bg-white d-flex gap-2">
-                <a href="{% url 'travelers:editar_viaje' viaje.id %}" class="btn btn-sm btn-outline-primary">Modificar</a>
-                <a href="{% url 'travelers:eliminar_viaje' viaje.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
-                <a href="{% url 'travelers:detalle_viaje' viaje.id %}" class="btn btn-sm btn-primary ms-auto">Ver detalles</a>
+                {% if perms.travelers.change_viaje %}<a href="{% url 'travelers:editar_viaje' viaje.id %}" class="btn btn-sm btn-outline-primary">Modificar</a>{% endif %}
+                {% if perms.travelers.delete_viaje %}<a href="{% url 'travelers:eliminar_viaje' viaje.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>{% endif %}
+                {% if perms.travelers.view_participacion %}<a href="{% url 'travelers:detalle_viaje' viaje.id %}" class="btn btn-sm btn-primary ms-auto">Ver detalles</a>{% endif %}
             </div>
         </div>
     </div>

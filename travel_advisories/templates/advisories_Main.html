@@ -1,15 +1,16 @@
-{% extends 'travelers_Base.html' %}
+{% extends 'advisories_Base.html' %}
 {% block titulo %}Alertas de viaje{% endblock %}
 {% block contenido %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Alertas de viaje</h2>
-    <a href="#" class="btn btn-success">+ Agregar alerta de viaje</a>
+    {% if perms.travel_advisories.add_alerta %}<a href="{% url 'travel_advisories:crear_alerta' %}" class="btn btn-success">+ Agregar alerta de viaje</a>{% endif %}
 </div>
 
-<form class="d-flex gap-2 mb-4" role="search" action="#" method="get">
-    <input type="text" name="q" class="form-control" placeholder="Buscar alerta por título o descripción...">
+<form class="d-flex gap-2 mb-4" role="search" action="{% url 'travel_advisories:lista_alerta' %}" method="get">
+    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Buscar alerta por título, descripción o destino...">
     <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+    {% if q %}<a href="{% url 'travel_advisories:lista_alerta' %}" class="btn btn-outline-dark">Limpiar</a>{% endif %}
 </form>
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -19,11 +20,11 @@
             <div class="card-body">
                 <h5 class="card-title">{{ alerta.titulo }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">
-                    {{ alerta.pais }} · inicia el {{ alerta.emision }} - termina el {{ alerta.expiracion }}
+                    {{ alerta.pais }} · emitida el {{ alerta.emision }} - expira el {{ alerta.expiracion }}
                 </h6>
                 <p class="card-text">{{ alerta.descripcion }}</p>
-                <div class="badge {% if alerta.nivel == 'B' %} bg-success {% elif alerta.nivel == 'M' %} bg-secondary {% elif alerta.nivel == 'A' %} bg-danger {% elif alerta.nivel == 'E' %} bg-black {% endif %} mb-2">
-                    {% if alerta.nivel == 'B' %} Bajo {% elif alerta.nivel == 'M' %} Medio {% elif alerta.nivel == 'A' %} Alto {% elif alerta.nivel == 'E' %} Extremo {% endif %}</div>
+                <span class="badge {% if alerta.nivel == 'B' %}bg-success{% elif alerta.nivel == 'M' %}bg-secondary{% elif alerta.nivel == 'A' %}bg-danger{% else %}bg-black{% endif %} mb-2">{{ alerta.get_nivel_display }}</span>
+                {% if not alerta.activo %}<span class="badge bg-light text-dark border mb-2">Inactiva</span>{% endif %}
                 {% for requisito in alerta.requisitos_vacunas.all %}
                 <p class="card-text mb-1">Vacuna: {{ requisito.vacuna }} - Tipo: {{ requisito.get_tipo_display }}</p>
                 {% empty %}
@@ -31,13 +32,14 @@
                 {% endfor %}
             </div>
             <div class="card-footer bg-white d-flex gap-2">
-                <a href="#" class="btn btn-sm btn-outline-primary">Modificar</a>
-                <a href="#" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                {% if perms.travel_advisories.change_alerta %}<a href="{% url 'travel_advisories:editar_alerta' alerta.id %}" class="btn btn-sm btn-outline-primary">Modificar</a>{% endif %}
+                {% if perms.travel_advisories.delete_alerta %}<a href="{% url 'travel_advisories:eliminar_alerta' alerta.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>{% endif %}
+                {% if perms.travel_advisories.view_requisitovacuna %}<a href="{% url 'travel_advisories:detalle_alerta' alerta.id %}" class="btn btn-sm btn-primary ms-auto">Requisitos de vacunas</a>{% endif %}
             </div>
         </div>
     </div>
     {% empty %}
-    <p class="text-muted">Aún no hay alertas cargadas en la base de datos.</p>
+    <p class="text-muted">{% if q %}No se encontraron alertas para "{{ q }}".{% else %}Aún no hay alertas cargadas en la base de datos.{% endif %}</p>
     {% endfor %}
 </div>
 

@@ -1,6 +1,7 @@
 # Sitio Informativo — Proyecto Django
 
-**Evaluación Sumativa N°2 — Aplicación web con Django Admin**
+**Evaluación Sumativa N°3 — Aplicación web con CRUD, autenticación y perfiles**
+(Evolución de la Evaluación Sumativa N°2)
 Asignatura: Programación Back End (TI3041) · INACAP sede La Serena
 Repositorio: <https://github.com/david123hi/sitio_web>
 
@@ -171,7 +172,8 @@ python manage.py cargar_destinos
 python manage.py cargar_cursos
 python manage.py cargar_restaurantes
 
-# 7. Crear el superusuario de Django Admin
+# 7. Crear los perfiles (grupos y permisos) y el primer usuario Administrador
+python manage.py crear_perfiles
 python manage.py createsuperuser
 
 # 8. Levantar el servidor
@@ -181,9 +183,8 @@ python manage.py runserver
 > En Windows, `pip install -r requirements.txt` puede fallar al instalar `mysqlclient`. Solo se necesita para MySQL (EC2); en local con SQLite se
 > puede omitir instalando manualmente `Django` y `python-decouple`.
 
-Los datos de `travelers` (viajes, viajeros y participaciones) y de `travel_advisories`
-(alertas, vacunas y requisitos) se ingresan desde Django Admin. Ver la sección
-*Datos de viajes y alertas*.
+Los datos de `travelers` y `travel_advisories` ya **no** se ingresan por Django Admin: se
+crean desde las pantallas del sistema (ver la sección *Evaluación N°3*).
 
 ### Rutas del sitio
 
@@ -202,12 +203,20 @@ Los datos de `travelers` (viajes, viajeros y participaciones) y de `travel_advis
 | `/viajes/viajeros/`           | Listado de viajeros                                |
 | `/viajes/<id>/`               | Detalle de un viaje y sus participantes            |
 | `/travel_advisories/`         | Listado de alertas de viaje                        |
-| `/admin/`                     | Django Admin (CRUD completo de las 14 tablas)      |
+| `/cuentas/login/`             | Inicio de sesión                                   |
+| `/cuentas/dashboard/`         | Dashboard según el perfil (Admin / Supervisor / Administrativo) |
+| `/cuentas/usuarios/`          | Gestión de usuarios y perfiles (solo Administrador) |
+| `/cuentas/recuperar/`         | Recuperación de contraseña por correo              |
+| `/viajes/viajeros/`           | Mantenedor de viajeros                             |
+| `/viajes/programar/`          | Transacción: programar viaje con organizador       |
+| `/travel_advisories/<id>/`    | Detalle de alerta y transacción de requisitos de vacunas |
+| `/travel_advisories/vacunas/` | Mantenedor de vacunas                              |
+| `/gestion/articulos/`, `/destinos/gestion/`, `/cursos/gestion/`, `/restaurantes/gestion/` | Mantenedores de artículos, destinos, cursos y restaurantes |
 
 ### Datos de viajes y alertas
 
-Estos módulos no parten de archivos JSON. Se crean desde `/admin/` respetando el
-orden de dependencias entre tablas:
+Estos módulos no parten de archivos JSON. Se crean desde las pantallas del sistema
+(sin Django Admin) respetando el orden de dependencias entre tablas:
 
 1. Viajeros
 2. Viajes (requiere un destino ya cargado)
@@ -219,6 +228,91 @@ orden de dependencias entre tablas:
 Con 2 o 3 registros por tabla basta para demostrar las relaciones. Los mismos pasos se
 repiten en la instancia EC2 después de ejecutar las migraciones y los comandos `cargar_*`.
 
+
+## Evaluación Sumativa N°3 — Autenticación, perfiles y CRUD
+
+A partir de esta evaluación **Django Admin ya no se usa**: se quitó la ruta `/admin/` y todas
+las operaciones se hacen desde páginas propias (Django Templates + Bootstrap + formularios
+Django + ORM).
+
+### Puesta en marcha (local y EC2)
+
+```
+python manage.py migrate
+python manage.py crear_perfiles      # crea los grupos y sus permisos (se puede repetir)
+python manage.py createsuperuser     # primer usuario: entra como Administrador
+python manage.py runserver
+```
+
+Luego se ingresa en `/cuentas/login/` y, desde **Usuarios**, el Administrador crea el resto
+de los usuarios asignándoles un perfil. Los 3 perfiles son grupos de Django; sus permisos
+están definidos en `cuentas/roles.py`.
+
+### Perfiles y permisos
+
+| Perfil         | Ver | Agregar | Modificar | Eliminar | Gestionar usuarios |
+| -------------- | :-: | :-----: | :-------: | :------: | :----------------: |
+| Administrador  |  ✔  |    ✔    |     ✔     |    ✔     |         ✔          |
+| Supervisor     |  ✔  |    ✔    |     ✔     |    ✘     |         ✘          |
+| Administrativo |  ✔  | solo viajeros y participaciones | ✘ | ✘ |  ✘          |
+
+- Las vistas de gestión exigen sesión (`login_required`) y el permiso del modelo
+  (`permission_required`); sin sesión se redirige al login y sin permiso se responde **403**.
+- Los botones Agregar/Modificar/Eliminar solo se muestran a quien tiene el permiso.
+- Cada perfil tiene su propio dashboard (`/cuentas/dashboard/`).
+
+### Mantenedores (8) y transacciones (3)
+
+| Mantenedor (crear, listar, buscar, modificar, eliminar) | Ruta base |
+| ------------------------------------------------------- | --------- |
+| Artículos   | `/gestion/articulos/` |
+| Destinos    | `/destinos/gestion/` |
+| Cursos      | `/cursos/gestion/` |
+| Restaurantes| `/restaurantes/gestion/` |
+| Viajes      | `/viajes/` |
+| Viajeros    | `/viajes/viajeros/` |
+| Alertas     | `/travel_advisories/` |
+| Vacunas     | `/travel_advisories/vacunas/` |
+
+| Transacción | Entidades | Validaciones |
+| ----------- | --------- | ------------ |
+| Programar viaje con organizador (`/viajes/programar/`) | Viaje + Viajero + Participacion | Fechas, cupos, organizador obligatorio; todo en `transaction.atomic()` |
+| Inscripción de participantes (`/viajes/<id>/`) | Viaje + Viajero + Participacion | Sin duplicados, un solo organizador, cupos disponibles, viaje no finalizado; el viaje pasa solo a *Completo*/*Abierto* |
+| Requisitos de vacunación (`/travel_advisories/<id>/`) | Alerta + Vacuna + RequisitoVacuna | Sin duplicados y alerta no expirada |
+
+Los mantenedores de artículos, destinos, cursos, restaurantes, viajeros y vacunas usan la
+fábrica `cuentas/crud.py` (vistas basadas en clases con permisos); los de viajes y alertas
+son vistas de función propias.
+
+### Recuperación de contraseña por correo
+
+Flujo: `/cuentas/recuperar/` (se pide el correo) → se genera un **token firmado de un solo
+uso** (`default_token_generator` de Django, vence en 1 hora) → llega el correo con el enlace →
+se valida el token → el usuario define su nueva contraseña → pantalla de confirmación → ingreso
+con la nueva contraseña.
+
+Configuración en el `.env` (ver `.env.example`):
+
+- Desarrollo: `EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend` (el correo se
+  imprime en la consola donde corre `runserver`).
+- Envío real (EC2 / revisión presencial): `EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`
+  con `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER` y `EMAIL_HOST_PASSWORD` (en Gmail se usa una
+  *contraseña de aplicación*). El usuario debe tener un correo registrado.
+- El enlace usa el dominio de la petición, por lo que en Nginx hay que reenviar el encabezado
+  `Host` (`proxy_set_header Host $http_host;`).
+
+### Cambios en el despliegue (EC2)
+
+```
+cd /var/www/negocio
+git pull origin main
+source venv/bin/activate
+python manage.py migrate
+python manage.py crear_perfiles
+python manage.py collectstatic --noinput
+sudo systemctl restart gunicorn
+```
+
 ## Despliegue en AWS EC2 (Amazon Linux)
 
 ### Sitio desplegado
@@ -227,7 +321,6 @@ La instancia tiene una **IP elástica**, por lo que la dirección no cambia aunq
 instancia se detenga y se vuelva a iniciar.
 
 - **Sitio:** <http://34.237.28.226/>
-- **Django Admin:** <http://34.237.28.226/admin/>
 - **phpMyAdmin:** <http://34.237.28.226:8080/>
 
 > Las credenciales de acceso se entregan en el Documento Técnico.
@@ -338,7 +431,7 @@ python manage.py collectstatic --noinput
 python manage.py createsuperuser
 ```
 
-Los viajes, viajeros, alertas y vacunas se crean después desde `/admin/`, siguiendo el orden
+Los viajes, viajeros, alertas y vacunas se crean después desde el sistema, siguiendo el orden
 indicado en la sección *Datos de viajes y alertas*, ya que dependen de los destinos cargados.
 
 ### 8. Servicios

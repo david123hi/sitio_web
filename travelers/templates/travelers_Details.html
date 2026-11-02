@@ -1,43 +1,51 @@
 {% extends 'travelers_Base.html' %}
-{% block titulo %} {{viaje.actividad}}{% endblock %}
+{% block titulo %}{{ viaje.actividad }}{% endblock %}
 {% block contenido %}
-<header class="tn-detail-header">
-    <div class="container">
-        <p class="mb-1"><a href="{% url 'travelers:lista_viajes' %}" class="text-black-50 text-decoration-none">&larr; Volver a viajes</a></p>
-        <h1>{{ viaje.actividad }}</h1>
-    </div>
-</header>
+<p class="mb-1"><a href="{% url 'travelers:lista_viajes' %}" class="text-decoration-none">&larr; Volver a viajes</a></p>
+<h1 class="h2">{{ viaje.actividad }}</h1>
+<p class="text-muted">
+    {{ viaje.destino }} · {{ viaje.inicio }} al {{ viaje.fin }} ·
+    <span class="badge {% if viaje.estado == 'A' %}bg-success{% elif viaje.estado == 'C' %}bg-secondary{% else %}bg-danger{% endif %}">{{ viaje.get_estado_display }}</span>
+    · {{ viaje.cupos_disponibles }} de {{ viaje.cupos }} cupos disponibles
+</p>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
-<h2 class="mt-4">Lista de participantes</h2>
-<a href="#" class="btn btn-success">+ Agregar participante</a>
+    <h2 class="h4 mt-3">Lista de participantes</h2>
+    {% if perms.travelers.add_participacion and viaje.estado != 'F' %}
+    <a href="{% url 'travelers:agregar_participacion' viaje.id %}" class="btn btn-success">+ Agregar participante</a>
+    {% endif %}
 </div>
 
-<form class="d-flex gap-2 mb-4" role="search" action="#" method="get">
-    <input type="text" name="q" class="form-control" placeholder="Buscar participante por nombre...">
+<form class="d-flex gap-2 mb-4" role="search" method="get" action="{% url 'travelers:detalle_viaje' viaje.id %}">
+    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Buscar participante por nombre o correo...">
     <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+    {% if q %}<a href="{% url 'travelers:detalle_viaje' viaje.id %}" class="btn btn-outline-dark">Limpiar</a>{% endif %}
 </form>
 
+<div class="table-responsive">
 <table class="table table-hover bg-white shadow-sm">
     <thead class="table-dark">
-        <tr>
-            <th>Nombre</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
+        <tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
     </thead>
     <tbody>
         {% for participacion in participaciones %}
         <tr>
-            <td>{{participacion.viajero}}</td>
-            <td>{% if participacion.rol == 'O' %} Organizador {% elif participacion.rol == 'V' %} Viajero {%elif participacion.rol == 'I' %} Viajero {%endif%} </td>
-            <td>{% if participacion.estado == 'C' %} Confirmado {% elif participacion.estado == 'P' %} Pendiente {%elif participacion.estado == 'N' %} No viaja {%endif%}</td>
-            <td class="d-flex gap-2">
-                <a href="#" class="btn btn-sm btn-outline-primary">Modificar</a>
-                <a href="#" class="btn btn-sm btn-outline-danger">Eliminar</a>
+            <td>{{ participacion.viajero.nombre }}</td>
+            <td>{{ participacion.viajero.correo }}</td>
+            <td>{{ participacion.get_rol_display }}</td>
+            <td>{{ participacion.get_estado_display }}</td>
+            <td>
+                <div class="d-flex gap-2">
+                    {% if perms.travelers.change_participacion %}<a href="{% url 'travelers:editar_participacion' participacion.id %}" class="btn btn-sm btn-outline-primary">Modificar</a>{% endif %}
+                    {% if perms.travelers.delete_participacion %}<a href="{% url 'travelers:eliminar_participacion' participacion.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>{% endif %}
+                    {% if not perms.travelers.change_participacion and not perms.travelers.delete_participacion %}<span class="text-muted small">Solo lectura</span>{% endif %}
+                </div>
             </td>
         </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-muted">{% if q %}No se encontraron participantes para "{{ q }}".{% else %}Este viaje aún no tiene participantes.{% endif %}</td></tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

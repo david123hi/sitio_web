@@ -1,0 +1,41 @@
+{% extends 'advisories_Base.html' %}
+{% block titulo %}{{ alerta.titulo }}{% endblock %}
+{% block contenido %}
+<p class="mb-1"><a href="{% url 'travel_advisories:lista_alerta' %}" class="text-decoration-none">&larr; Volver a alertas</a></p>
+<h1 class="h2">{{ alerta.titulo }}</h1>
+<p class="text-muted">{{ alerta.pais }} · nivel {{ alerta.get_nivel_display }} · vigente del {{ alerta.emision }} al {{ alerta.expiracion }}</p>
+<p>{{ alerta.descripcion }}</p>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4 mt-3">Requisitos de vacunación</h2>
+    {% if perms.travel_advisories.add_requisitovacuna %}
+    <a href="{% url 'travel_advisories:agregar_requisito' alerta.id %}" class="btn btn-success">+ Agregar requisito</a>
+    {% endif %}
+</div>
+
+<div class="table-responsive">
+<table class="table table-hover bg-white shadow-sm">
+    <thead class="table-dark">
+        <tr><th>Vacuna</th><th>Tipo</th><th>Notas</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+        {% for r in requisitos %}
+        <tr>
+            <td>{{ r.vacuna }}</td>
+            <td>{{ r.get_tipo_display }}</td>
+            <td>{{ r.notas|default:"—" }}</td>
+            <td>
+                <div class="d-flex gap-2">
+                    {% if perms.travel_advisories.change_requisitovacuna %}<a href="{% url 'travel_advisories:editar_requisito' r.id %}" class="btn btn-sm btn-outline-primary">Modificar</a>{% endif %}
+                    {% if perms.travel_advisories.delete_requisitovacuna %}<a href="{% url 'travel_advisories:eliminar_requisito' r.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>{% endif %}
+                    {% if not perms.travel_advisories.change_requisitovacuna and not perms.travel_advisories.delete_requisitovacuna %}<span class="text-muted small">Solo lectura</span>{% endif %}
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-muted">Esta alerta no tiene requisitos de vacunación.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

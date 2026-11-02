@@ -19,6 +19,16 @@ class Viaje (models.Model):
     def cupos_disponibles(self):
         inscritos = self.participaciones.filter(estado='C').count()
         return self.cupos - inscritos
+
+    def sincronizar_estado(self):
+        """Abierto <-> Completo según los cupos. Un viaje Finalizado no cambia."""
+        if self.estado == 'F':
+            return
+        nuevo = 'C' if self.cupos_disponibles <= 0 else 'A'
+        if nuevo != self.estado:
+            self.estado = nuevo
+            self.save(update_fields=['estado'])
+
     def __str__(self):
         return self.actividad
     class Meta:
