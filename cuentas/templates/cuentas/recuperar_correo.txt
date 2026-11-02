@@ -1,0 +1,12 @@
+{% autoescape off %}Hola {{ user.get_full_name|default:user.get_username }},
+
+Recibimos una solicitud para restablecer la contraseña de tu cuenta (usuario: {{ user.get_username }}).
+
+Haz clic en el siguiente enlace para crear una nueva contraseña:
+
+{{ protocol }}://{{ domain }}{% url 'cuentas:recuperar_confirmar' uidb64=uid token=token %}
+
+El enlace es de un solo uso y vence en 1 hora. Si no solicitaste este cambio, ignora este correo: tu contraseña seguirá siendo la misma.
+
+Viajes Juanito
+{% endautoescape %}

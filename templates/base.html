@@ -23,9 +23,10 @@
         <li><a class="nav-link" href="{% url 'destinos:listado' %}">Destinos</a></li>
         <li><a class="nav-link" href="{% url 'cursos:listado' %}">Cursos</a></li>
         <li><a class="nav-link" href="{% url 'restaurantes:listado' %}">Restaurantes</a></li>
-        <li><a class="nav-link" href="{% url 'travelers:lista_viajes' %}">Viajes</a></li>
-        <li><a class="nav-link" href="{% url 'travel_advisories:lista_alerta' %}">Alertas de viaje</a></li>
-        <li><a class="nav-link" href="/admin/" target="_blank">Django Admin</a></li>
+        {% if perms.travelers.view_viaje %}<li><a class="nav-link" href="{% url 'travelers:lista_viajes' %}">Viajes</a></li>{% endif %}
+        {% if perms.travel_advisories.view_alerta %}<li><a class="nav-link" href="{% url 'travel_advisories:lista_alerta' %}">Alertas de viaje</a></li>{% endif %}
+        {% if user.is_authenticated %}<li><a class="nav-link" href="{% url 'cuentas:dashboard' %}">Dashboard</a></li>{% endif %}
+        {% include 'partials/auth_nav.html' %}
       </ul>
     </div>
   </nav>
@@ -42,6 +43,7 @@
 
   <!-- ===================== CONTENIDO PRINCIPAL ===================== -->
   <main class="container mb-5">
+    {% include 'partials/mensajes.html' %}
     {% block contenido %}
     {% endblock %}
   </main>

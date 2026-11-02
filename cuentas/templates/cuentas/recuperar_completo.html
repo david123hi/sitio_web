@@ -1,0 +1,15 @@
+{% extends 'base_gestion.html' %}
+{% block titulo %}Contraseña actualizada{% endblock %}
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-success">
+            <div class="card-body p-4 text-center">
+                <h2 class="h4 mb-3">¡Contraseña cambiada con éxito!</h2>
+                <p>Ya puedes iniciar sesión con tu nueva contraseña.</p>
+                <a href="{% url 'cuentas:login' %}" class="btn btn-success">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

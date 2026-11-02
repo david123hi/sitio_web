@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'restaurantes',
     'travelers',
     'travel_advisories',
+
+    # Evaluación N°3: autenticación, perfiles (grupos) y dashboards
+    'cuentas',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cuentas.context_processors.perfil',   # expone `rol_usuario`
             ],
         },
     },
@@ -131,3 +135,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # directamente desde aquí.
 # ------------------------------------------------------------------
 DATA_DIR = BASE_DIR / 'data'
+
+
+# ------------------------------------------------------------------
+# Evaluación Sumativa N°3: autenticación y recuperación de contraseña
+# ------------------------------------------------------------------
+LOGIN_URL = 'cuentas:login'
+LOGIN_REDIRECT_URL = 'cuentas:dashboard'
+LOGOUT_REDIRECT_URL = 'cuentas:login'
+
+# El enlace de recuperación (token firmado) vence a la hora.
+PASSWORD_RESET_TIMEOUT = 60 * 60
+
+# Correo saliente. Por defecto los correos se imprimen en la consola del
+# servidor (útil en desarrollo). Para enviarlos de verdad (EC2 / demo),
+# definir en el .env: EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+# y las variables EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD.
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER or 'no-responder@viajesjuanito.local')

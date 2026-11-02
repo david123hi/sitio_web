@@ -1,0 +1,33 @@
+{% extends 'base_gestion.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-danger">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-3">{{ titulo }}</h2>
+                <p>¿Seguro que deseas eliminar el {{ singular }} <strong>{{ object }}</strong>?</p>
+                {% if protegido %}
+                <div class="alert alert-danger">
+                    No se puede eliminar: hay registros asociados que lo protegen. Elimina o reasigna primero esos registros.
+                </div>
+                {% elif dependientes %}
+                <div class="alert alert-warning">
+                    También se eliminarán registros asociados:
+                    <ul class="mb-0">
+                        {% for nombre, cantidad in dependientes.items %}<li>{{ cantidad }} {{ nombre }}</li>{% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        {% if not protegido %}<button type="submit" class="btn btn-danger">Sí, eliminar</button>{% endif %}
+                        <a href="{{ url_cancelar }}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

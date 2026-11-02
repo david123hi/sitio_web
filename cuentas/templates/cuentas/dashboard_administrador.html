@@ -1,0 +1,58 @@
+{% extends 'base_gestion.html' %}
+{% block titulo %}Dashboard Administrador{% endblock %}
+{% block contenido %}
+<h2 class="mb-1">Dashboard Administrador</h2>
+<p class="text-muted">Acceso total al sistema: mantenedores, transacciones y gestión de usuarios.</p>
+
+<h3 class="h5 mt-4">Visión global</h3>
+<div class="row row-cols-2 row-cols-md-5 g-3 mb-4">
+    {% for nombre, total in totales %}
+    <div class="col">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6">{{ total }}</div>
+                <div class="text-muted small">{{ nombre }}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-dark text-white">Mantenedores</div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action" href="{% url 'blog:articulo_lista' %}">Artículos</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'destinos:destino_lista' %}">Destinos</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'cursos:curso_lista' %}">Cursos</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'restaurantes:restaurante_lista' %}">Restaurantes</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'travelers:viajero_lista' %}">Viajeros</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'travel_advisories:vacuna_lista' %}">Vacunas</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-dark text-white">Transacciones</div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action" href="{% url 'travelers:programar_viaje' %}">Programar viaje con organizador</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'travelers:lista_viajes' %}">Viajes e inscripción de participantes</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'travel_advisories:lista_alerta' %}">Alertas y requisitos de vacunación</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-dark text-white">Gestión de usuarios</div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action" href="{% url 'cuentas:usuarios' %}">Ver usuarios</a>
+                <a class="list-group-item list-group-item-action" href="{% url 'cuentas:usuario_crear' %}">Crear usuario y asignar perfil</a>
+                {% for u in usuarios_recientes %}
+                <div class="list-group-item small text-muted">{{ u.username }}{% if u.is_superuser %} (superusuario){% endif %}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base_gestion.html' %}
+{% block titulo %}Dashboard Supervisor{% endblock %}
+{% block contenido %}
+<h2 class="mb-1">Dashboard Supervisor</h2>
+<p class="text-muted">Información operacional. Puedes ver, agregar y modificar; la eliminación y la gestión de usuarios están reservadas al Administrador.</p>
+
+<div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajes_abiertos }}</div><div class="text-muted small">Viajes abiertos</div></div></div></div>
+    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajes_completos }}</div><div class="text-muted small">Viajes completos</div></div></div></div>
+    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ pendientes }}</div><div class="text-muted small">Participaciones pendientes</div></div></div></div>
+    <div class="col"><div class="card text-center shadow-sm border-danger"><div class="card-body"><div class="display-6">{{ alertas_graves }}</div><div class="text-muted small">Alertas altas/extremas vigentes</div></div></div></div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-dark text-white">Próximos viajes</div>
+            <ul class="list-group list-group-flush">
+                {% for v in proximos_viajes %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <a href="{% url 'travelers:detalle_viaje' v.id %}">{{ v.actividad }}</a>
+                    <span class="text-muted small">{{ v.destino }} · {{ v.inicio }}</span>
+                </li>
+                {% empty %}<li class="list-group-item text-muted">No hay viajes próximos.</li>{% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-dark text-white">Alertas vigentes</div>
+            <ul class="list-group list-group-flush">
+                {% for a in alertas_activas %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <a href="{% url 'travel_advisories:detalle_alerta' a.id %}">{{ a.titulo }}</a>
+                    <span class="text-muted small">{{ a.pais }} · {{ a.get_nivel_display }}</span>
+                </li>
+                {% empty %}<li class="list-group-item text-muted">No hay alertas vigentes.</li>{% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex flex-wrap gap-2">
+    <a class="btn btn-primary" href="{% url 'travelers:programar_viaje' %}">Programar viaje</a>
+    <a class="btn btn-outline-primary" href="{% url 'travelers:lista_viajes' %}">Viajes</a>
+    <a class="btn btn-outline-primary" href="{% url 'travelers:viajero_lista' %}">Viajeros</a>
+    <a class="btn btn-outline-primary" href="{% url 'travel_advisories:lista_alerta' %}">Alertas</a>
+    <a class="btn btn-outline-primary" href="{% url 'travel_advisories:vacuna_lista' %}">Vacunas</a>
+</div>
+{% endblock %}

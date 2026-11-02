@@ -1,0 +1,25 @@
+{% extends 'base_gestion.html' %}
+{% block titulo %}Dashboard Administrativo{% endblock %}
+{% block contenido %}
+<h2 class="mb-1">Dashboard Administrativo</h2>
+{% if sin_perfil %}
+<div class="alert alert-warning">Tu usuario aún no tiene un perfil asignado. Pide a un Administrador que te asigne uno.</div>
+{% else %}
+<p class="text-muted">Acceso solo a las funcionalidades asignadas. Las operaciones críticas (modificar y eliminar) están restringidas.</p>
+{% endif %}
+
+<div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajes_abiertos }}</div><div class="text-muted small">Viajes abiertos</div></div></div></div>
+    <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">{{ viajeros }}</div><div class="text-muted small">Viajeros registrados</div></div></div></div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">Mis funcionalidades</div>
+    <div class="list-group list-group-flush">
+        {% if perms.travelers.add_viajero %}<a class="list-group-item list-group-item-action" href="{% url 'travelers:viajero_crear' %}">Registrar un viajero</a>{% endif %}
+        {% if perms.travelers.view_viaje %}<a class="list-group-item list-group-item-action" href="{% url 'travelers:lista_viajes' %}">Consultar viajes e inscribir participantes</a>{% endif %}
+        {% if perms.travelers.view_viajero %}<a class="list-group-item list-group-item-action" href="{% url 'travelers:viajero_lista' %}">Consultar viajeros</a>{% endif %}
+        {% if perms.travel_advisories.view_alerta %}<a class="list-group-item list-group-item-action" href="{% url 'travel_advisories:lista_alerta' %}">Consultar alertas de viaje</a>{% endif %}
+    </div>
+</div>
+{% endblock %}
