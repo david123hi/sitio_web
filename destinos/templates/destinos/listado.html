@@ -3,7 +3,7 @@
 
 {% block titulo %}{{ titulo_pagina }}{% endblock %}
 {% block encabezado_titulo %}Destinos de Viaje{% endblock %}
-{% block encabezado_subtitulo %}Información cargada dinámicamente desde destinos.json{% endblock %}
+{% block encabezado_subtitulo %}Información almacenada en la base de datos{% endblock %}
 
 {% block contenido %}
 
@@ -15,7 +15,7 @@
       <input class="form-control me-2" type="search" name="q" value="{{ busqueda }}" placeholder="Buscar destino por nombre...">
       <button class="btn btn-outline-secondary" type="submit">Buscar</button>
     </form>
-    <a href="#" class="btn btn-success">+ Agregar destino</a>
+    {% if perms.destinos.add_destino %}<a href="{% url 'destinos:destino_crear' %}" class="btn btn-success">+ Agregar destino</a>{% endif %}
   </div>
 
   <div class="mb-4">
@@ -42,8 +42,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <a href="{% url 'destinos:detalle' destino.slug %}" class="btn btn-primary btn-sm">Ver detalle</a>
                 <div class="btn-group btn-group-sm">
-                  <a href="#" class="btn btn-outline-primary">Modificar</a>
-                  <a href="#" class="btn btn-outline-danger">Eliminar</a>
+                  {% if perms.destinos.change_destino %}<a href="{% url 'destinos:destino_editar' destino.pk %}" class="btn btn-outline-primary">Modificar</a>{% endif %}
+                  {% if perms.destinos.delete_destino %}<a href="{% url 'destinos:destino_eliminar' destino.pk %}" class="btn btn-outline-danger">Eliminar</a>{% endif %}
                 </div>
               </div>
             </div>

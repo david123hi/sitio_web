@@ -15,7 +15,7 @@
       <input class="form-control me-2" type="search" name="q" value="{{ busqueda }}" placeholder="Buscar restaurante por nombre...">
       <button class="btn btn-outline-secondary" type="submit">Buscar</button>
     </form>
-    <a href="#" class="btn btn-success">+ Agregar restaurante</a>
+    {% if perms.restaurantes.add_restaurante %}<a href="{% url 'restaurantes:restaurante_crear' %}" class="btn btn-success">+ Agregar restaurante</a>{% endif %}
   </div>
 
   <div class="mb-4">
@@ -43,8 +43,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <a href="{% url 'restaurantes:detalle' restaurante.slug %}" class="btn btn-primary btn-sm">Ver detalle</a>
                 <div class="btn-group btn-group-sm">
-                  <a href="#" class="btn btn-outline-primary">Modificar</a>
-                  <a href="#" class="btn btn-outline-danger">Eliminar</a>
+                  {% if perms.restaurantes.change_restaurante %}<a href="{% url 'restaurantes:restaurante_editar' restaurante.pk %}" class="btn btn-outline-primary">Modificar</a>{% endif %}
+                  {% if perms.restaurantes.delete_restaurante %}<a href="{% url 'restaurantes:restaurante_eliminar' restaurante.pk %}" class="btn btn-outline-danger">Eliminar</a>{% endif %}
                 </div>
               </div>
             </div>

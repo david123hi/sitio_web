@@ -3,7 +3,7 @@
 
 {% block titulo %}{{ titulo_pagina }}{% endblock %}
 {% block encabezado_titulo %}Artículos del Blog{% endblock %}
-{% block encabezado_subtitulo %}Información cargada dinámicamente desde articulos.json{% endblock %}
+{% block encabezado_subtitulo %}Información almacenada en la base de datos{% endblock %}
 
 {% block contenido %}
 
@@ -13,7 +13,7 @@
       <input class="form-control me-2" type="search" name="q" value="{{ busqueda }}" placeholder="Buscar artículo por título...">
       <button class="btn btn-outline-secondary" type="submit">Buscar</button>
     </form>
-    <a href="#" class="btn btn-success">+ Agregar artículo</a>
+    {% if perms.blog.add_articulo %}<a href="{% url 'blog:articulo_crear' %}" class="btn btn-success">+ Agregar artículo</a>{% endif %}
   </div>
 
   <div class="mb-4">
@@ -40,8 +40,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <a href="{% url 'blog:detalle_articulo' articulo.id %}" class="btn btn-primary btn-sm">Leer artículo</a>
                 <div class="btn-group btn-group-sm">
-                  <a href="#" class="btn btn-outline-primary">Modificar</a>
-                  <a href="#" class="btn btn-outline-danger">Eliminar</a>
+                  {% if perms.blog.change_articulo %}<a href="{% url 'blog:articulo_editar' articulo.pk %}" class="btn btn-outline-primary">Modificar</a>{% endif %}
+                  {% if perms.blog.delete_articulo %}<a href="{% url 'blog:articulo_eliminar' articulo.pk %}" class="btn btn-outline-danger">Eliminar</a>{% endif %}
                 </div>
               </div>
             </div>

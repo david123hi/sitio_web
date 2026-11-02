@@ -8,10 +8,12 @@ del proyecto las incluye con include().
 
 from django.urls import path
 from . import views
+from .mantenedores import articulos as mant_articulos
 
 app_name = 'blog'
 
 urlpatterns = [
+    *mant_articulos.urls('gestion/articulos/'),
     path('', views.inicio, name='inicio'),
     path('articulos/', views.lista_articulos, name='lista_articulos'),
     path('articulos/<int:articulo_id>/', views.detalle_articulo, name='detalle_articulo'),
