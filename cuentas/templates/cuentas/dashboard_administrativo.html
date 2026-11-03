@@ -35,6 +35,15 @@
     </div>
     <div class="col-lg-6">
         <div class="panel">
+            <div class="panel-head"><i class="bi bi-arrow-left-right"></i> Transacciones</div>
+            {% if perms.operaciones.add_reservadestino %}<a class="quick-item" href="{% url 'operaciones:destino_nueva' %}"><span class="qi"><i class="bi bi-geo-alt"></i></span>Reservar un destino<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.operaciones.add_reservamesa %}<a class="quick-item" href="{% url 'operaciones:mesa_nueva' %}"><span class="qi"><i class="bi bi-egg-fried"></i></span>Reservar una mesa<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.operaciones.add_inscripcioncurso %}<a class="quick-item" href="{% url 'operaciones:curso_nueva' %}"><span class="qi"><i class="bi bi-mortarboard"></i></span>Inscribir a un curso<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.operaciones.add_suscripcionblog %}<a class="quick-item" href="{% url 'operaciones:blog_nueva' %}"><span class="qi"><i class="bi bi-newspaper"></i></span>Suscribir al blog<i class="bi bi-chevron-right"></i></a>{% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel">
             <div class="panel-head"><i class="bi bi-lock"></i> Operaciones restringidas</div>
             <div class="quick-item bloqueado"><span class="qi"><i class="bi bi-pencil-square"></i></span>Modificar registros existentes<span class="ms-auto small">Supervisor o Administrador</span></div>
             <div class="quick-item bloqueado"><span class="qi"><i class="bi bi-trash3"></i></span>Eliminar registros<span class="ms-auto small">Administrador</span></div>

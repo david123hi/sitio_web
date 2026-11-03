@@ -45,6 +45,20 @@
     </div>
 </div>
 
+<div class="panel mt-4">
+    <div class="panel-head"><i class="bi bi-arrow-left-right"></i> Transacciones</div>
+    <div class="row g-0">
+        <div class="col-md-6">
+            {% if perms.operaciones.view_reservadestino %}<a class="quick-item" href="{% url 'operaciones:destino_lista' %}"><span class="qi"><i class="bi bi-geo-alt"></i></span>Reservas de destinos<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.operaciones.view_reservamesa %}<a class="quick-item" href="{% url 'operaciones:mesa_lista' %}"><span class="qi"><i class="bi bi-egg-fried"></i></span>Reservas de mesa<i class="bi bi-chevron-right"></i></a>{% endif %}
+        </div>
+        <div class="col-md-6">
+            {% if perms.operaciones.view_inscripcioncurso %}<a class="quick-item" href="{% url 'operaciones:curso_lista' %}"><span class="qi"><i class="bi bi-mortarboard"></i></span>Inscripciones a cursos<i class="bi bi-chevron-right"></i></a>{% endif %}
+            {% if perms.operaciones.view_suscripcionblog %}<a class="quick-item" href="{% url 'operaciones:blog_lista' %}"><span class="qi"><i class="bi bi-newspaper"></i></span>Suscripciones al blog<i class="bi bi-chevron-right"></i></a>{% endif %}
+        </div>
+    </div>
+</div>
+
 <div class="mt-4 d-flex flex-wrap gap-2">
     <a class="btn btn-outline-primary" href="{% url 'travelers:viajero_lista' %}"><i class="bi bi-person-badge"></i> Viajeros</a>
     <a class="btn btn-outline-primary" href="{% url 'travel_advisories:lista_alerta' %}"><i class="bi bi-exclamation-triangle"></i> Alertas</a>
