@@ -42,6 +42,17 @@
                         </ul>
                     </li>
                     {% endif %}
+                    {% if perms.operaciones.view_reservadestino or perms.operaciones.view_reservamesa or perms.operaciones.view_inscripcioncurso or perms.operaciones.view_suscripcionblog %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if ns == 'operaciones' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown">Operaciones</a>
+                        <ul class="dropdown-menu">
+                            {% if perms.operaciones.view_reservadestino %}<li><a class="dropdown-item" href="{% url 'operaciones:destino_lista' %}">Reservas de destinos</a></li>{% endif %}
+                            {% if perms.operaciones.view_reservamesa %}<li><a class="dropdown-item" href="{% url 'operaciones:mesa_lista' %}">Reservas de mesa</a></li>{% endif %}
+                            {% if perms.operaciones.view_inscripcioncurso %}<li><a class="dropdown-item" href="{% url 'operaciones:curso_lista' %}">Inscripciones a cursos</a></li>{% endif %}
+                            {% if perms.operaciones.view_suscripcionblog %}<li><a class="dropdown-item" href="{% url 'operaciones:blog_lista' %}">Suscripciones al blog</a></li>{% endif %}
+                        </ul>
+                    </li>
+                    {% endif %}
                     {% if perms.auth.view_user %}<li class="nav-item"><a class="nav-link {% if ns == 'cuentas' and 'usuario' in un %}active{% endif %}" href="{% url 'cuentas:usuarios' %}">Usuarios</a></li>{% endif %}
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">

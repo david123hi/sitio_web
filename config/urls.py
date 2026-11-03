@@ -14,6 +14,7 @@ basta con volver a agregar:  path('admin/', admin.site.urls)
 from django.urls import path, include
 
 urlpatterns = [
+    path('operaciones/', include('operaciones.urls')),
     # Autenticación, dashboards y gestión de usuarios
     path('cuentas/', include('cuentas.urls')),
 
