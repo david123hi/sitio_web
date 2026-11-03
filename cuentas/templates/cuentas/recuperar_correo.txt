@@ -8,5 +8,5 @@ Haz clic en el siguiente enlace para crear una nueva contraseña:
 
 El enlace es de un solo uso y vence en 1 hora. Si no solicitaste este cambio, ignora este correo: tu contraseña seguirá siendo la misma.
 
-Viajes Juanito
+SitioInformativo
 {% endautoescape %}

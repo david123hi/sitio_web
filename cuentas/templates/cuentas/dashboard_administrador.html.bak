@@ -1,0 +1,61 @@
+{% extends 'base_gestion.html' %}
+{% block titulo %}Dashboard Administrador{% endblock %}
+{% block contenido %}
+<section class="hero hero-admin">
+    <div>
+        <span class="rol-chip"><i class="bi bi-shield-check"></i> Perfil Administrador</span>
+        <h1>Hola, {{ user.get_full_name|default:user.username }}</h1>
+        <p>Tienes acceso total: mantenedores, transacciones y gestión de usuarios.</p>
+    </div>
+    <div class="hero-actions">
+        <a class="btn btn-light" href="{% url 'travelers:programar_viaje' %}"><i class="bi bi-signpost-split"></i> Programar viaje</a>
+        <a class="btn btn-outline-light" href="{% url 'cuentas:usuario_crear' %}"><i class="bi bi-person-plus"></i> Crear usuario</a>
+    </div>
+</section>
+
+<div class="stat-grid">
+    {% for nombre, total in totales %}
+    <div class="stat">
+        <span class="stat-ico {% if nombre == 'Usuarios' %}tone-ink{% elif nombre == 'Viajes' or nombre == 'Viajeros' or nombre == 'Participaciones' %}tone-lagoon{% elif nombre == 'Alertas' or nombre == 'Vacunas' %}tone-amber{% else %}tone-ocean{% endif %}">
+            <i class="bi {% if nombre == 'Usuarios' %}bi-people{% elif nombre == 'Artículos' %}bi-newspaper{% elif nombre == 'Destinos' %}bi-geo-alt{% elif nombre == 'Cursos' %}bi-mortarboard{% elif nombre == 'Restaurantes' %}bi-egg-fried{% elif nombre == 'Viajes' %}bi-airplane{% elif nombre == 'Viajeros' %}bi-person-badge{% elif nombre == 'Participaciones' %}bi-ticket-perforated{% elif nombre == 'Alertas' %}bi-exclamation-triangle{% else %}bi-shield-plus{% endif %}"></i>
+        </span>
+        <div><div class="stat-num">{{ total }}</div><div class="stat-lbl">{{ nombre }}</div></div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="panel">
+            <div class="panel-head"><i class="bi bi-collection"></i> Mantenedores</div>
+            <a class="quick-item" href="{% url 'blog:articulo_lista' %}"><span class="qi"><i class="bi bi-newspaper"></i></span>Artículos<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'destinos:destino_lista' %}"><span class="qi"><i class="bi bi-geo-alt"></i></span>Destinos<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'cursos:curso_lista' %}"><span class="qi"><i class="bi bi-mortarboard"></i></span>Cursos<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'restaurantes:restaurante_lista' %}"><span class="qi"><i class="bi bi-egg-fried"></i></span>Restaurantes<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'travelers:viajero_lista' %}"><span class="qi"><i class="bi bi-person-badge"></i></span>Viajeros<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'travel_advisories:vacuna_lista' %}"><span class="qi"><i class="bi bi-shield-plus"></i></span>Vacunas<i class="bi bi-chevron-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel">
+            <div class="panel-head"><i class="bi bi-arrow-left-right"></i> Transacciones</div>
+            <a class="quick-item" href="{% url 'travelers:programar_viaje' %}"><span class="qi"><i class="bi bi-signpost-split"></i></span>Programar viaje con organizador<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'travelers:lista_viajes' %}"><span class="qi"><i class="bi bi-airplane"></i></span>Viajes e inscripción de participantes<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'travel_advisories:lista_alerta' %}"><span class="qi"><i class="bi bi-exclamation-triangle"></i></span>Alertas y requisitos de vacunación<i class="bi bi-chevron-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel">
+            <div class="panel-head"><i class="bi bi-people"></i> Gestión de usuarios</div>
+            <a class="quick-item" href="{% url 'cuentas:usuarios' %}"><span class="qi"><i class="bi bi-list-ul"></i></span>Ver usuarios<i class="bi bi-chevron-right"></i></a>
+            <a class="quick-item" href="{% url 'cuentas:usuario_crear' %}"><span class="qi"><i class="bi bi-person-plus"></i></span>Crear usuario y asignar perfil<i class="bi bi-chevron-right"></i></a>
+            {% for u in usuarios_recientes %}
+            <div class="fila-info">
+                <span class="usuario-cel"><span class="avatar">{{ u.username|slice:":2"|upper }}</span>{{ u.username }}</span>
+                <small>{% if u.is_superuser %}superusuario{% else %}{{ u.groups.first.name|default:"sin perfil" }}{% endif %}</small>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
