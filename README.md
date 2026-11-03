@@ -18,7 +18,7 @@ Repositorio: <https://github.com/david123hi/sitio_web>
 ### Objetivo
 
 Evolucionar el sitio web modular de la Evaluación Sumativa N°1, que leía su
-información desde archivos JSON, hacia una aplicación web funcional con **base de datos relacional**, administrable desde **Django Admin** y
+información desde archivos JSON, hacia una aplicación web funcional con **base de datos relacional**, administrable desde páginas propias (sin Django Admin) y
 desplegada en infraestructura cloud (**AWS EC2**), usando **Git y GitHub** como control de versiones y mecanismo de distribución.
 
 ### Temática
@@ -37,15 +37,10 @@ Sitio informativo con seis módulos (aplicaciones Django) independientes:
 - Modelos Django con relaciones (`ForeignKey`) y migraciones en las seis aplicaciones (14 tablas propias).
 - Migración completa de los datos JSON hacia la base de datos
 (comandos `cargar_articulos`, `cargar_destinos`, `cargar_cursos` y `cargar_restaurantes`).
-- Todas las entidades registradas en Django Admin (crear, modificar,
-eliminar, visualizar, buscar y navegar entre entidades relacionadas).
 - Vistas que obtienen la información mediante consultas Django ORM y la
 muestran con plantillas Django y Bootstrap (tarjetas y tablas).
 - Filtro por categoría, continente, área o tipo de cocina, y búsqueda por nombre en los listados de los módulos con filtros.
 - Barra de navegación Bootstrap entre los módulos.
-- Botones **Agregar, Modificar, Eliminar y Buscar** visibles en cada
-listado (marcadores visuales con enlace `#`; su funcionamiento real se
-implementa en la siguiente evaluación sumativa).
 - Configuración sensible fuera del código, mediante variables de entorno.
 
 ## Arquitectura
@@ -67,7 +62,9 @@ sitio_web/
 ├── cursos/               # app 3: Area, Curso
 ├── restaurantes/         # app 4: TipoCocina, Restaurante
 ├── travelers/            # app 5: Viaje, Viajero, Participacion
-└── travel_advisories/    # app 6: Alerta, Vacuna, RequisitoVacuna
+├── travel_advisories/    # app 6: Alerta, Vacuna, RequisitoVacuna
+└── operaciones/          # 4 transacciones: reserva de destino, reserva de mesa,
+                          # inscripción a curso, suscripción al blog
 ```
 
 Cada aplicación contiene su propio `models.py`, `admin.py`, `views.py`, `urls.py`,
@@ -240,6 +237,7 @@ Django + ORM).
 ```
 python manage.py migrate
 python manage.py crear_perfiles      # crea los grupos y sus permisos (se puede repetir)
+python manage.py asignar_permisos_operaciones   # permisos de las 4 transacciones nuevas
 python manage.py createsuperuser     # primer usuario: entra como Administrador
 python manage.py runserver
 ```
@@ -261,7 +259,7 @@ están definidos en `cuentas/roles.py`.
 - Los botones Agregar/Modificar/Eliminar solo se muestran a quien tiene el permiso.
 - Cada perfil tiene su propio dashboard (`/cuentas/dashboard/`).
 
-### Mantenedores (8) y transacciones (3)
+### Mantenedores (8) y transacciones (7)
 
 | Mantenedor (crear, listar, buscar, modificar, eliminar) | Ruta base |
 | ------------------------------------------------------- | --------- |
@@ -279,6 +277,10 @@ están definidos en `cuentas/roles.py`.
 | Programar viaje con organizador (`/viajes/programar/`) | Viaje + Viajero + Participacion | Fechas, cupos, organizador obligatorio; todo en `transaction.atomic()` |
 | Inscripción de participantes (`/viajes/<id>/`) | Viaje + Viajero + Participacion | Sin duplicados, un solo organizador, cupos disponibles, viaje no finalizado; el viaje pasa solo a *Completo*/*Abierto* |
 | Requisitos de vacunación (`/travel_advisories/<id>/`) | Alerta + Vacuna + RequisitoVacuna | Sin duplicados y alerta no expirada |
+| Reserva de destino (`/operaciones/reservas-destino/nueva/`) | ReservaDestino + Viajero + Destino | Fecha futura, sin duplicados, total calculado; atómico |
+| Reserva de mesa (`/operaciones/reservas-mesa/nueva/`) | ReservaMesa + Viajero + Restaurante | Fecha y hora futuras, sin duplicados, aforo de 30 por horario; atómico |
+| Inscripción a curso (`/operaciones/inscripciones-curso/nueva/`) | InscripcionCurso + Viajero + Curso | Sin doble inscripción, monto del curso; atómico |
+| Suscripción al blog (`/operaciones/suscripciones-blog/nueva/`) | SuscripcionBlog + Viajero + Categoria | Sin repetidas, máximo 5 categorías; atómico |
 
 Los mantenedores de artículos, destinos, cursos, restaurantes, viajeros y vacunas usan la
 fábrica `cuentas/crud.py` (vistas basadas en clases con permisos); los de viajes y alertas
@@ -309,6 +311,7 @@ git pull origin main
 source venv/bin/activate
 python manage.py migrate
 python manage.py crear_perfiles
+python manage.py asignar_permisos_operaciones
 python manage.py collectstatic --noinput
 sudo systemctl restart gunicorn
 ```

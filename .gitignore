@@ -24,4 +24,5 @@ staticfiles/
 Thumbs.db
 
 # Logs
-*.log*.bak
+*.log
+*.bak
