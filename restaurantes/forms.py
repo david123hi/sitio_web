@@ -30,3 +30,15 @@ class RestauranteForm(SlugAutomaticoMixin, BootstrapModelForm):
         if nota < 0 or nota > 5:
             raise forms.ValidationError('La calificación debe estar entre 0 y 5.')
         return nota
+
+    def clean(self):
+        datos = super().clean()
+        nombre, ciudad = datos.get('nombre'), (datos.get('ciudad') or '').strip()
+        if nombre and ciudad:
+            repetido = Restaurante.objects.filter(
+                nombre__iexact=nombre, ciudad__iexact=ciudad
+            ).exclude(pk=self.instance.pk)
+            if repetido.exists():
+                raise forms.ValidationError(
+                    'Ya existe un restaurante con ese nombre en esa ciudad.')
+        return datos

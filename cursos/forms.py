@@ -26,3 +26,15 @@ class CursoForm(BootstrapModelForm):
         if horas < 1:
             raise forms.ValidationError('La duración debe ser de al menos 1 hora.')
         return horas
+
+    def clean(self):
+        datos = super().clean()
+        titulo, instructor = datos.get('titulo'), (datos.get('instructor') or '').strip()
+        if titulo and instructor:
+            repetido = Curso.objects.filter(
+                titulo__iexact=titulo, instructor__iexact=instructor
+            ).exclude(pk=self.instance.pk)
+            if repetido.exists():
+                raise forms.ValidationError(
+                    'Ya existe un curso con ese título dictado por ese instructor.')
+        return datos
